@@ -1,4 +1,4 @@
-# Master-Capstone-Project
+# Multi-Agent-File-Assistant
 
 # Task 5-6-7: Multi-Agent File Assistant
 
