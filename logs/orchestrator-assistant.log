@@ -1,0 +1,1689 @@
+*[1m([0morchestrator-assistant[1m)[0m [1m[[0mwhite[1m][0m Entity.SYSTEM [1m[[0m[35m/[0m[95mwhite[0m[1m][0m [1m[[0mmagenta[1m][0mEntity.SYSTEM[1m[[0m[35m/[0m[95mmagenta[0m[1m][0m[1m([0morchestrator-assistant[1m)[0m [1m([0m=>          [1m)[0m [1m([0mX           [1m)[0m       [1m([0m          [1m)[0m [1m[[0mmagenta[1m][0mYou are the main file 
+assistant that can help a user with requests about files.
+
+    You have access to the following tools:
+    `file_search`: Use this tool to search for the file
+    `TODO:file-summarize`: Use this tool to search for the file
+    `write_file`: Use this tool to write contents to the file
+    `done_tool`: Use this when your task is complete to return the final result.
+    
+    
+    CRITICAL: You CANNOT use multiple tools at once! You must use ONE tool at a time,
+        wait for the result, and THEN decide what to do next.
+
+    When your task is complete, you MUST use the `done_tool` tool to 
+    indicate completion, and use the `content` field to return any response you wish to 
+    provide. It is CRITICAL to use the `content` field to return any results 
+    sought by the user, since they will NOT be able to see anything outside of this tool!
+    
+
+=== GUIDELINES ON SOME TOOLS/FUNCTIONS USAGE ===
+            TOOL: done_tool:
+                        GUIDANCE: 
+        When you determine your task is finished, 
+        use the tool `done_tool` to signal this,
+        along with any message or result, in the `content` field. 
+
+        IMPORTANT: When using this or any other tool/function, you MUST include a 
+        `request` field and set it equal to the FUNCTION/TOOL NAME you intend to use.
+
+
+
+
+TOOL: TODO:file-summarize:
+                        GUIDANCE: 
+        IMPORTANT: When using this or any other tool/function, you MUST include a 
+        `request` field and set it equal to the FUNCTION/TOOL NAME you intend to use.
+
+
+
+
+TOOL: file_search:
+                        GUIDANCE: 
+        IMPORTANT: When using this or any other tool/function, you MUST include a 
+        `request` field and set it equal to the FUNCTION/TOOL NAME you intend to use.
+
+
+
+
+TOOL: write_file:
+                        GUIDANCE: 
+        IMPORTANT: When using this or any other tool/function, you MUST include a 
+        `request` field and set it equal to the FUNCTION/TOOL NAME you intend to use.
+
+
+
+
+
+
+=== ALL AVAILABLE TOOLS and THEIR FORMAT INSTRUCTIONS ===
+You have access to the following TOOLS to accomplish your task:
+
+TOOL: done_tool
+            PURPOSE: 
+    To signal the current task is done, along with an optional message [1m<[0m[1;95mcontent[0m[1m>[0m
+    of arbitrary type [1m([0mdefault [3;35mNone[0m[1m)[0m.
+
+            JSON FORMAT: [1m{[0m
+    [32m"properties"[0m: [1m{[0m
+        [32m"request"[0m: [1m{[0m
+            [32m"default"[0m: [32m"done_tool"[0m,
+            [32m"type"[0m: [32m"string"[0m
+        [1m}[0m,
+        [32m"content"[0m: [1m{[0m
+            [32m"default"[0m: [32m""[0m,
+            [32m"type"[0m: [32m"string"[0m
+        [1m}[0m
+    [1m}[0m,
+    [32m"type"[0m: [32m"object"[0m,
+    [32m"required"[0m: [1m[[0m
+        [32m"request"[0m
+    [1m][0m,
+    [32m"request"[0m: [1m{[0m
+        [32m"enum"[0m: [1m[[0m
+            [32m"done_tool"[0m
+        [1m][0m,
+        [32m"type"[0m: [32m"string"[0m
+    [1m}[0m
+[1m}[0m
+
+
+
+TOOL: TODO:file-summarize
+            PURPOSE: The purpose of this tool is to summarize files 
+            JSON FORMAT: [1m{[0m
+    [32m"properties"[0m: [1m{[0m
+        [32m"request"[0m: [1m{[0m
+            [32m"default"[0m: [32m"TODO:file-summarize"[0m,
+            [32m"type"[0m: [32m"string"[0m
+        [1m}[0m,
+        [32m"file_path"[0m: [1m{[0m
+            [32m"description"[0m: [32m"The file path to summarize contents from"[0m,
+            [32m"type"[0m: [32m"string"[0m
+        [1m}[0m
+    [1m}[0m,
+    [32m"required"[0m: [1m[[0m
+        [32m"file_path"[0m,
+        [32m"request"[0m
+    [1m][0m,
+    [32m"type"[0m: [32m"object"[0m,
+    [32m"request"[0m: [1m{[0m
+        [32m"enum"[0m: [1m[[0m
+            [32m"TODO:file-summarize"[0m
+        [1m][0m,
+        [32m"type"[0m: [32m"string"[0m
+    [1m}[0m
+[1m}[0m
+
+
+
+TOOL: file_search
+            PURPOSE: Search for files in a directory based on a query 
+            JSON FORMAT: [1m{[0m
+    [32m"properties"[0m: [1m{[0m
+        [32m"request"[0m: [1m{[0m
+            [32m"default"[0m: [32m"file_search"[0m,
+            [32m"type"[0m: [32m"string"[0m
+        [1m}[0m,
+        [32m"directory"[0m: [1m{[0m
+            [32m"description"[0m: [32m"Directory to search in"[0m,
+            [32m"type"[0m: [32m"string"[0m
+        [1m}[0m,
+        [32m"query"[0m: [1m{[0m
+            [32m"description"[0m: [32m"Search query to find relevant files"[0m,
+            [32m"type"[0m: [32m"string"[0m
+        [1m}[0m
+    [1m}[0m,
+    [32m"required"[0m: [1m[[0m
+        [32m"directory"[0m,
+        [32m"query"[0m,
+        [32m"request"[0m
+    [1m][0m,
+    [32m"type"[0m: [32m"object"[0m,
+    [32m"request"[0m: [1m{[0m
+        [32m"enum"[0m: [1m[[0m
+            [32m"file_search"[0m
+        [1m][0m,
+        [32m"type"[0m: [32m"string"[0m
+    [1m}[0m
+[1m}[0m
+
+
+
+TOOL: write_file
+            PURPOSE: Write content to a file 
+            JSON FORMAT: [1m{[0m
+    [32m"properties"[0m: [1m{[0m
+        [32m"request"[0m: [1m{[0m
+            [32m"default"[0m: [32m"write_file"[0m,
+            [32m"type"[0m: [32m"string"[0m
+        [1m}[0m,
+        [32m"path"[0m: [1m{[0m
+            [32m"description"[0m: [32m"The file path to write to"[0m,
+            [32m"type"[0m: [32m"string"[0m
+        [1m}[0m,
+        [32m"content"[0m: [1m{[0m
+            [32m"description"[0m: [32m"The content to write to the file"[0m,
+            [32m"type"[0m: [32m"string"[0m
+        [1m}[0m
+    [1m}[0m,
+    [32m"required"[0m: [1m[[0m
+        [32m"content"[0m,
+        [32m"path"[0m,
+        [32m"request"[0m
+    [1m][0m,
+    [32m"type"[0m: [32m"object"[0m,
+    [32m"request"[0m: [1m{[0m
+        [32m"enum"[0m: [1m[[0m
+            [32m"write_file"[0m
+        [1m][0m,
+        [32m"type"[0m: [32m"string"[0m
+    [1m}[0m
+[1m}[0m
+
+
+
+When one of the above TOOLs is applicable, you must express your 
+request as [32m"TOOL:"[0m followed by the request in the above format.[1m[[0m[35m/[0m[95mmagenta[0m[1m][0m
+*[1m([0morchestrator-assistant[1m)[0m [1m[[0mwhite[1m][0m Entity.USER [1m[[0m[35m/[0m[95mwhite[0m[1m][0m [1m[[0mblue[1m][0mEntity.USER[1m[[0m[35m/[0m[95mblue[0m[1m][0m[1m([0morchestrator-assistant[1m)[0m [1m([0m=>          [1m)[0m [1m([0mX           [1m)[0m       [1m([0m          [1m)[0m [1m[[0mblue[1m][0m
+        Find files about music in the myfiles directory and 
+        tell me which music-related people were discussed in those files.
+        [1m[[0m[35m/[0m[95mblue[0m[1m][0m
+ [1m([0morchestrator-assistant[1m)[0m [1m[[0mred[1m][0m Entity.USER [1m[[0m[35m/[0m[95mred[0m[1m][0m [1m[[0mblue[1m][0mEntity.USER[1m[[0m[35m/[0m[95mblue[0m[1m][0m[1m([0mEntity.USER[1m)[0m [1m([0m=>          [1m)[0m [1m([0mX           [1m)[0m       [1m([0m          [1m)[0m [1m[[0mblue[1m][0m[1m[[0mCANNOT RESPOND[1m][0m[1m[[0m[35m/[0m[95mblue[0m[1m][0m
+ [1m([0morchestrator-assistant[1m)[0m [1m[[0mred[1m][0m Entity.AGENT [1m[[0m[35m/[0m[95mred[0m[1m][0m
+*[1m([0morchestrator-assistant[1m)[0m [1m[[0mwhite[1m][0m Entity.LLM [1m[[0m[35m/[0m[95mwhite[0m[1m][0m [1m[[0mgreen[1m][0mEntity.LLM[1m[[0m[35m/[0m[95mgreen[0m[1m][0m[1m([0m          [1m)[0m [1m([0m=>          [1m)[0m [1m([0mX           [1m)[0m   [1;35mTOOL[0m[1m([0mfile_search[1m)[0m 
+[1m[[0mgreen[1m][0mTOOL:[1m{[0m[32m"request"[0m:[32m"file_search"[0m,[32m"directory"[0m:[32m"myfiles"[0m,[32m"query"[0m:[32m"music"[0m[1m}[0m[1m[[0m[35m/[0m[95mgreen[0m[1m][0m
+*[1m([0morchestrator-assistant[1m)[0m [1m[[0mwhite[1m][0m Entity.AGENT [1m[[0m[35m/[0m[95mwhite[0m[1m][0m [1m[[0mred[1m][0mEntity.AGENT[1m[[0m[35m/[0m[95mred[0m[1m][0m[1m([0morchestrator-assistant[1m)[0m [1m([0m=>          [1m)[0m [1m([0mX           [1m)[0m       [1m([0m          [1m)[0m [1m[[0mred[1m][0mbeethoven.md: This file contains extensive
+information about Ludwig van Beethoven, a highly influential classical music composer, detailing his works and impact on music history.
+beyonce.md: This file discusses Beyoncé's musical career, her albums, Grammy awards, and her influence on the music industry and popular music.
+bill_evans.md: This file describes Bill Evans, a revolutionary jazz pianist, his musical innovations, and his significant impact on modern jazz piano.[1m[[0m[35m/[0m[95mred[0m[1m][0m
+ [1m([0morchestrator-assistant[1m)[0m [1m[[0mred[1m][0m Entity.USER [1m[[0m[35m/[0m[95mred[0m[1m][0m [1m[[0mblue[1m][0mEntity.USER[1m[[0m[35m/[0m[95mblue[0m[1m][0m[1m([0mEntity.USER[1m)[0m [1m([0m=>          [1m)[0m [1m([0mX           [1m)[0m       [1m([0m          [1m)[0m [1m[[0mblue[1m][0m[1m[[0mCANNOT RESPOND[1m][0m[1m[[0m[35m/[0m[95mblue[0m[1m][0m
+ [1m([0morchestrator-assistant[1m)[0m [1m[[0mred[1m][0m Entity.AGENT [1m[[0m[35m/[0m[95mred[0m[1m][0m [1m[[0mred[1m][0mEntity.AGENT[1m[[0m[35m/[0m[95mred[0m[1m][0m[1m([0mEntity.AGENT[1m)[0m [1m([0m=>          [1m)[0m [1m([0mX           [1m)[0m       [1m([0m          [1m)[0m [1m[[0mred[1m][0m[1m[[0mCANNOT RESPOND[1m][0m[1m[[0m[35m/[0m[95mred[0m[1m][0m
+*[1m([0morchestrator-assistant[1m)[0m [1m[[0mwhite[1m][0m Entity.LLM [1m[[0m[35m/[0m[95mwhite[0m[1m][0m [1m[[0mgreen[1m][0mEntity.LLM[1m[[0m[35m/[0m[95mgreen[0m[1m][0m[1m([0m          [1m)[0m [1m([0m=>          [1m)[0m [1m([0mX           [1m)[0m   [1;35mTOOL[0m[1m([0m done_tool[1m)[0m [1m[[0mgreen[1m][0mTOOL:[1m{[0m[32m"request"[0m:[32m"done_tool"[0m,[32m"content"[0m:[32m"The [0m
+[32mmusic-related people discussed in the files are Ludwig van Beethoven, Beyoncé, and Bill Evans."[0m[1m}[0m[1m[[0m[35m/[0m[95mgreen[0m[1m][0m
+*[1m([0morchestrator-assistant[1m)[0m [1m[[0mwhite[1m][0m Entity.SYSTEM [1m[[0m[35m/[0m[95mwhite[0m[1m][0m [1m[[0mmagenta[1m][0mEntity.SYSTEM[1m[[0m[35m/[0m[95mmagenta[0m[1m][0m[1m([0morchestrator-assistant[1m)[0m [1m([0m=>          [1m)[0m [1m([0mX           [1m)[0m       [1m([0m          [1m)[0m [1m[[0mmagenta[1m][0mYou are the main file 
+assistant that can help a user with requests about files.
+
+    You have access to the following tools:
+    `file_search`: Use this tool to search for the file
+    `TODO:file-summarize`: Use this tool to search for the file
+    `write_file`: Use this tool to write contents to the file
+    `done_tool`: Use this when your task is complete to return the final result.
+    
+    
+    CRITICAL: You CANNOT use multiple tools at once! You must use ONE tool at a time,
+        wait for the result, and THEN decide what to do next.
+
+    When your task is complete, you MUST use the `done_tool` tool to 
+    indicate completion, and use the `content` field to return any response you wish to 
+    provide. It is CRITICAL to use the `content` field to return any results 
+    sought by the user, since they will NOT be able to see anything outside of this tool!
+    
+
+=== GUIDELINES ON SOME TOOLS/FUNCTIONS USAGE ===
+            TOOL: done_tool:
+                        GUIDANCE: 
+        When you determine your task is finished, 
+        use the tool `done_tool` to signal this,
+        along with any message or result, in the `content` field. 
+
+        IMPORTANT: When using this or any other tool/function, you MUST include a 
+        `request` field and set it equal to the FUNCTION/TOOL NAME you intend to use.
+
+
+
+
+TOOL: TODO:file-summarize:
+                        GUIDANCE: 
+        IMPORTANT: When using this or any other tool/function, you MUST include a 
+        `request` field and set it equal to the FUNCTION/TOOL NAME you intend to use.
+
+
+
+
+TOOL: file_search:
+                        GUIDANCE: 
+        IMPORTANT: When using this or any other tool/function, you MUST include a 
+        `request` field and set it equal to the FUNCTION/TOOL NAME you intend to use.
+
+
+
+
+TOOL: write_file:
+                        GUIDANCE: 
+        IMPORTANT: When using this or any other tool/function, you MUST include a 
+        `request` field and set it equal to the FUNCTION/TOOL NAME you intend to use.
+
+
+
+
+
+
+=== ALL AVAILABLE TOOLS and THEIR FORMAT INSTRUCTIONS ===
+You have access to the following TOOLS to accomplish your task:
+
+TOOL: done_tool
+            PURPOSE: 
+    To signal the current task is done, along with an optional message [1m<[0m[1;95mcontent[0m[1m>[0m
+    of arbitrary type [1m([0mdefault [3;35mNone[0m[1m)[0m.
+
+            JSON FORMAT: [1m{[0m
+    [32m"properties"[0m: [1m{[0m
+        [32m"request"[0m: [1m{[0m
+            [32m"default"[0m: [32m"done_tool"[0m,
+            [32m"type"[0m: [32m"string"[0m
+        [1m}[0m,
+        [32m"content"[0m: [1m{[0m
+            [32m"default"[0m: [32m""[0m,
+            [32m"type"[0m: [32m"string"[0m
+        [1m}[0m
+    [1m}[0m,
+    [32m"type"[0m: [32m"object"[0m,
+    [32m"required"[0m: [1m[[0m
+        [32m"request"[0m
+    [1m][0m,
+    [32m"request"[0m: [1m{[0m
+        [32m"enum"[0m: [1m[[0m
+            [32m"done_tool"[0m
+        [1m][0m,
+        [32m"type"[0m: [32m"string"[0m
+    [1m}[0m
+[1m}[0m
+
+
+
+TOOL: TODO:file-summarize
+            PURPOSE: The purpose of this tool is to summarize files 
+            JSON FORMAT: [1m{[0m
+    [32m"properties"[0m: [1m{[0m
+        [32m"request"[0m: [1m{[0m
+            [32m"default"[0m: [32m"TODO:file-summarize"[0m,
+            [32m"type"[0m: [32m"string"[0m
+        [1m}[0m,
+        [32m"file_path"[0m: [1m{[0m
+            [32m"description"[0m: [32m"The file path to summarize contents from"[0m,
+            [32m"type"[0m: [32m"string"[0m
+        [1m}[0m
+    [1m}[0m,
+    [32m"required"[0m: [1m[[0m
+        [32m"file_path"[0m,
+        [32m"request"[0m
+    [1m][0m,
+    [32m"type"[0m: [32m"object"[0m,
+    [32m"request"[0m: [1m{[0m
+        [32m"enum"[0m: [1m[[0m
+            [32m"TODO:file-summarize"[0m
+        [1m][0m,
+        [32m"type"[0m: [32m"string"[0m
+    [1m}[0m
+[1m}[0m
+
+
+
+TOOL: file_search
+            PURPOSE: Search for files in a directory based on a query 
+            JSON FORMAT: [1m{[0m
+    [32m"properties"[0m: [1m{[0m
+        [32m"request"[0m: [1m{[0m
+            [32m"default"[0m: [32m"file_search"[0m,
+            [32m"type"[0m: [32m"string"[0m
+        [1m}[0m,
+        [32m"directory"[0m: [1m{[0m
+            [32m"description"[0m: [32m"Directory to search in"[0m,
+            [32m"type"[0m: [32m"string"[0m
+        [1m}[0m,
+        [32m"query"[0m: [1m{[0m
+            [32m"description"[0m: [32m"Search query to find relevant files"[0m,
+            [32m"type"[0m: [32m"string"[0m
+        [1m}[0m
+    [1m}[0m,
+    [32m"required"[0m: [1m[[0m
+        [32m"directory"[0m,
+        [32m"query"[0m,
+        [32m"request"[0m
+    [1m][0m,
+    [32m"type"[0m: [32m"object"[0m,
+    [32m"request"[0m: [1m{[0m
+        [32m"enum"[0m: [1m[[0m
+            [32m"file_search"[0m
+        [1m][0m,
+        [32m"type"[0m: [32m"string"[0m
+    [1m}[0m
+[1m}[0m
+
+
+
+TOOL: write_file
+            PURPOSE: Write content to a file 
+            JSON FORMAT: [1m{[0m
+    [32m"properties"[0m: [1m{[0m
+        [32m"request"[0m: [1m{[0m
+            [32m"default"[0m: [32m"write_file"[0m,
+            [32m"type"[0m: [32m"string"[0m
+        [1m}[0m,
+        [32m"path"[0m: [1m{[0m
+            [32m"description"[0m: [32m"The file path to write to"[0m,
+            [32m"type"[0m: [32m"string"[0m
+        [1m}[0m,
+        [32m"content"[0m: [1m{[0m
+            [32m"description"[0m: [32m"The content to write to the file"[0m,
+            [32m"type"[0m: [32m"string"[0m
+        [1m}[0m
+    [1m}[0m,
+    [32m"required"[0m: [1m[[0m
+        [32m"content"[0m,
+        [32m"path"[0m,
+        [32m"request"[0m
+    [1m][0m,
+    [32m"type"[0m: [32m"object"[0m,
+    [32m"request"[0m: [1m{[0m
+        [32m"enum"[0m: [1m[[0m
+            [32m"write_file"[0m
+        [1m][0m,
+        [32m"type"[0m: [32m"string"[0m
+    [1m}[0m
+[1m}[0m
+
+
+
+When one of the above TOOLs is applicable, you must express your 
+request as [32m"TOOL:"[0m followed by the request in the above format.[1m[[0m[35m/[0m[95mmagenta[0m[1m][0m
+*[1m([0morchestrator-assistant[1m)[0m [1m[[0mwhite[1m][0m Entity.USER [1m[[0m[35m/[0m[95mwhite[0m[1m][0m [1m[[0mblue[1m][0mEntity.USER[1m[[0m[35m/[0m[95mblue[0m[1m][0m[1m([0morchestrator-assistant[1m)[0m [1m([0m=>          [1m)[0m [1m([0mX           [1m)[0m       [1m([0m          [1m)[0m [1m[[0mblue[1m][0m
+        Search for files about finance in myfiles and write 
+        a file-by file summary to myfiles/test_summary.txt, formatted 
+        in markdown, with each header being the topic of the file, and the file-path
+        [1m[[0m[35m/[0m[95mblue[0m[1m][0m
+ [1m([0morchestrator-assistant[1m)[0m [1m[[0mred[1m][0m Entity.USER [1m[[0m[35m/[0m[95mred[0m[1m][0m [1m[[0mblue[1m][0mEntity.USER[1m[[0m[35m/[0m[95mblue[0m[1m][0m[1m([0mEntity.USER[1m)[0m [1m([0m=>          [1m)[0m [1m([0mX           [1m)[0m       [1m([0m          [1m)[0m [1m[[0mblue[1m][0m[1m[[0mCANNOT RESPOND[1m][0m[1m[[0m[35m/[0m[95mblue[0m[1m][0m
+ [1m([0morchestrator-assistant[1m)[0m [1m[[0mred[1m][0m Entity.AGENT [1m[[0m[35m/[0m[95mred[0m[1m][0m
+*[1m([0morchestrator-assistant[1m)[0m [1m[[0mwhite[1m][0m Entity.LLM [1m[[0m[35m/[0m[95mwhite[0m[1m][0m [1m[[0mgreen[1m][0mEntity.LLM[1m[[0m[35m/[0m[95mgreen[0m[1m][0m[1m([0m          [1m)[0m [1m([0m=>          [1m)[0m [1m([0mX           [1m)[0m   [1;35mTOOL[0m[1m([0mfile_search[1m)[0m 
+[1m[[0mgreen[1m][0mTOOL:[1m{[0m[32m"request"[0m:[32m"file_search"[0m,[32m"directory"[0m:[32m"myfiles"[0m,[32m"query"[0m:[32m"finance"[0m[1m}[0m[1m[[0m[35m/[0m[95mgreen[0m[1m][0m
+*[1m([0morchestrator-assistant[1m)[0m [1m[[0mwhite[1m][0m Entity.AGENT [1m[[0m[35m/[0m[95mwhite[0m[1m][0m [1m[[0mred[1m][0mEntity.AGENT[1m[[0m[35m/[0m[95mred[0m[1m][0m[1m([0morchestrator-assistant[1m)[0m [1m([0m=>          [1m)[0m [1m([0mX           [1m)[0m       [1m([0m          [1m)[0m [1m[[0mred[1m][0mbudgeting_tips.md: This file contains 
+information on [32m'Smart Budgeting Techniques'[0m, including the [1;36m50[0m/[1;36m30[0m/[1;36m20[0m rule, tracking expenses, and automating savings, all of which are core concepts in personal finance.
+debt_management.md: This file discusses [32m'Effective Debt Management'[0m strategies such as the avalanche and snowball methods, debt consolidation, and managing credit cards and loans, directly relating to
+financial management.
+investment_basics.md: This file covers [32m'Investment Fundamentals'[0m, including risk vs. reward, diversification, dollar-cost averaging, and understanding fees, which are essential topics in finance and 
+wealth building.[1m[[0m[35m/[0m[95mred[0m[1m][0m
+ [1m([0morchestrator-assistant[1m)[0m [1m[[0mred[1m][0m Entity.USER [1m[[0m[35m/[0m[95mred[0m[1m][0m [1m[[0mblue[1m][0mEntity.USER[1m[[0m[35m/[0m[95mblue[0m[1m][0m[1m([0mEntity.USER[1m)[0m [1m([0m=>          [1m)[0m [1m([0mX           [1m)[0m       [1m([0m          [1m)[0m [1m[[0mblue[1m][0m[1m[[0mCANNOT RESPOND[1m][0m[1m[[0m[35m/[0m[95mblue[0m[1m][0m
+ [1m([0morchestrator-assistant[1m)[0m [1m[[0mred[1m][0m Entity.AGENT [1m[[0m[35m/[0m[95mred[0m[1m][0m [1m[[0mred[1m][0mEntity.AGENT[1m[[0m[35m/[0m[95mred[0m[1m][0m[1m([0mEntity.AGENT[1m)[0m [1m([0m=>          [1m)[0m [1m([0mX           [1m)[0m       [1m([0m          [1m)[0m [1m[[0mred[1m][0m[1m[[0mCANNOT RESPOND[1m][0m[1m[[0m[35m/[0m[95mred[0m[1m][0m
+*[1m([0morchestrator-assistant[1m)[0m [1m[[0mwhite[1m][0m Entity.LLM [1m[[0m[35m/[0m[95mwhite[0m[1m][0m [1m[[0mgreen[1m][0mEntity.LLM[1m[[0m[35m/[0m[95mgreen[0m[1m][0m[1m([0m          [1m)[0m [1m([0m=>          [1m)[0m [1m([0mX           [1m)[0m   [1;35mTOOL[0m[1m([0mwrite_file[1m)[0m 
+[1m[[0mgreen[1m][0mTOOL:[1m{[0m[32m"request"[0m:[32m"write_file"[0m,[32m"path"[0m:[32m"myfiles/test_summary.txt"[0m,[32m"content"[0m:[32m"# Smart Budgeting Techniques\n\n**File Path:** budgeting_tips.md\n\nThis file contains information on 'Smart Budgeting [0m
+[32mTechniques', including the 50/30/20 rule, tracking expenses, and automating savings, all of which are core concepts in personal finance.\n\n# Effective Debt Management\n\n**File Path:** [0m
+[32mdebt_management.md\n\nThis file discusses 'Effective Debt Management' strategies such as the avalanche and snowball methods, debt consolidation, and managing credit cards and loans, directly relating [0m
+[32mto financial management.\n\n# Investment Fundamentals\n\n**File Path:** investment_basics.md\n\nThis file covers 'Investment Fundamentals', including risk vs. reward, diversification, dollar-cost [0m
+[32maveraging, and understanding fees, which are essential topics in finance and wealth building."[0m[1m}[0m[1m[[0m[35m/[0m[95mgreen[0m[1m][0m
+*[1m([0morchestrator-assistant[1m)[0m [1m[[0mwhite[1m][0m Entity.AGENT [1m[[0m[35m/[0m[95mwhite[0m[1m][0m [1m[[0mred[1m][0mEntity.AGENT[1m[[0m[35m/[0m[95mred[0m[1m][0m[1m([0morchestrator-assistant[1m)[0m [1m([0m=>          [1m)[0m [1m([0mX           [1m)[0m       [1m([0m          [1m)[0m [1m[[0mred[1m][0mSuccessfully wrote to 
+myfiles/test_summary.txt[1m[[0m[35m/[0m[95mred[0m[1m][0m
+ [1m([0morchestrator-assistant[1m)[0m [1m[[0mred[1m][0m Entity.USER [1m[[0m[35m/[0m[95mred[0m[1m][0m [1m[[0mblue[1m][0mEntity.USER[1m[[0m[35m/[0m[95mblue[0m[1m][0m[1m([0mEntity.USER[1m)[0m [1m([0m=>          [1m)[0m [1m([0mX           [1m)[0m       [1m([0m          [1m)[0m [1m[[0mblue[1m][0m[1m[[0mCANNOT RESPOND[1m][0m[1m[[0m[35m/[0m[95mblue[0m[1m][0m
+ [1m([0morchestrator-assistant[1m)[0m [1m[[0mred[1m][0m Entity.AGENT [1m[[0m[35m/[0m[95mred[0m[1m][0m [1m[[0mred[1m][0mEntity.AGENT[1m[[0m[35m/[0m[95mred[0m[1m][0m[1m([0mEntity.AGENT[1m)[0m [1m([0m=>          [1m)[0m [1m([0mX           [1m)[0m       [1m([0m          [1m)[0m [1m[[0mred[1m][0m[1m[[0mCANNOT RESPOND[1m][0m[1m[[0m[35m/[0m[95mred[0m[1m][0m
+*[1m([0morchestrator-assistant[1m)[0m [1m[[0mwhite[1m][0m Entity.LLM [1m[[0m[35m/[0m[95mwhite[0m[1m][0m [1m[[0mgreen[1m][0mEntity.LLM[1m[[0m[35m/[0m[95mgreen[0m[1m][0m[1m([0m          [1m)[0m [1m([0m=>          [1m)[0m [1m([0mX           [1m)[0m   [1;35mTOOL[0m[1m([0m done_tool[1m)[0m [1m[[0mgreen[1m][0mTOOL:[1m{[0m[32m"request"[0m:[32m"done_tool"[0m,[32m"content"[0m:[32m"Successfully [0m
+[32mcreated the file-by-file summary of finance-related files in `myfiles/test_summary.txt`."[0m[1m}[0m[1m[[0m[35m/[0m[95mgreen[0m[1m][0m
+*[1m([0morchestrator-assistant[1m)[0m [1m[[0mwhite[1m][0m Entity.SYSTEM [1m[[0m[35m/[0m[95mwhite[0m[1m][0m [1m[[0mmagenta[1m][0mEntity.SYSTEM[1m[[0m[35m/[0m[95mmagenta[0m[1m][0m[1m([0morchestrator-assistant[1m)[0m [1m([0m=>          [1m)[0m [1m([0mX           [1m)[0m       [1m([0m          [1m)[0m [1m[[0mmagenta[1m][0mYou are the main file 
+assistant that can help a user with requests about files.
+
+    You have access to the following tools:
+    `file_search`: Use this tool to search for the file
+    `TODO:file-summarize`: Use this tool to search for the file
+    `write_file`: Use this tool to write contents to the file
+    `done_tool`: Use this when your task is complete to return the final result.
+    
+    
+    CRITICAL: You CANNOT use multiple tools at once! You must use ONE tool at a time,
+        wait for the result, and THEN decide what to do next.
+
+    When your task is complete, you MUST use the `done_tool` tool to 
+    indicate completion, and use the `content` field to return any response you wish to 
+    provide. It is CRITICAL to use the `content` field to return any results 
+    sought by the user, since they will NOT be able to see anything outside of this tool!
+    
+
+=== GUIDELINES ON SOME TOOLS/FUNCTIONS USAGE ===
+            TOOL: done_tool:
+                        GUIDANCE: 
+        When you determine your task is finished, 
+        use the tool `done_tool` to signal this,
+        along with any message or result, in the `content` field. 
+
+        IMPORTANT: When using this or any other tool/function, you MUST include a 
+        `request` field and set it equal to the FUNCTION/TOOL NAME you intend to use.
+
+
+
+
+TOOL: TODO:file-summarize:
+                        GUIDANCE: 
+        IMPORTANT: When using this or any other tool/function, you MUST include a 
+        `request` field and set it equal to the FUNCTION/TOOL NAME you intend to use.
+
+
+
+
+TOOL: file_search:
+                        GUIDANCE: 
+        IMPORTANT: When using this or any other tool/function, you MUST include a 
+        `request` field and set it equal to the FUNCTION/TOOL NAME you intend to use.
+
+
+
+
+TOOL: write_file:
+                        GUIDANCE: 
+        IMPORTANT: When using this or any other tool/function, you MUST include a 
+        `request` field and set it equal to the FUNCTION/TOOL NAME you intend to use.
+
+
+
+
+
+
+=== ALL AVAILABLE TOOLS and THEIR FORMAT INSTRUCTIONS ===
+You have access to the following TOOLS to accomplish your task:
+
+TOOL: done_tool
+            PURPOSE: 
+    To signal the current task is done, along with an optional message [1m<[0m[1;95mcontent[0m[1m>[0m
+    of arbitrary type [1m([0mdefault [3;35mNone[0m[1m)[0m.
+
+            JSON FORMAT: [1m{[0m
+    [32m"properties"[0m: [1m{[0m
+        [32m"request"[0m: [1m{[0m
+            [32m"default"[0m: [32m"done_tool"[0m,
+            [32m"type"[0m: [32m"string"[0m
+        [1m}[0m,
+        [32m"content"[0m: [1m{[0m
+            [32m"default"[0m: [32m""[0m,
+            [32m"type"[0m: [32m"string"[0m
+        [1m}[0m
+    [1m}[0m,
+    [32m"type"[0m: [32m"object"[0m,
+    [32m"required"[0m: [1m[[0m
+        [32m"request"[0m
+    [1m][0m,
+    [32m"request"[0m: [1m{[0m
+        [32m"enum"[0m: [1m[[0m
+            [32m"done_tool"[0m
+        [1m][0m,
+        [32m"type"[0m: [32m"string"[0m
+    [1m}[0m
+[1m}[0m
+
+
+
+TOOL: TODO:file-summarize
+            PURPOSE: The purpose of this tool is to summarize files 
+            JSON FORMAT: [1m{[0m
+    [32m"properties"[0m: [1m{[0m
+        [32m"request"[0m: [1m{[0m
+            [32m"default"[0m: [32m"TODO:file-summarize"[0m,
+            [32m"type"[0m: [32m"string"[0m
+        [1m}[0m,
+        [32m"file_path"[0m: [1m{[0m
+            [32m"description"[0m: [32m"The file path to summarize contents from"[0m,
+            [32m"type"[0m: [32m"string"[0m
+        [1m}[0m
+    [1m}[0m,
+    [32m"required"[0m: [1m[[0m
+        [32m"file_path"[0m,
+        [32m"request"[0m
+    [1m][0m,
+    [32m"type"[0m: [32m"object"[0m,
+    [32m"request"[0m: [1m{[0m
+        [32m"enum"[0m: [1m[[0m
+            [32m"TODO:file-summarize"[0m
+        [1m][0m,
+        [32m"type"[0m: [32m"string"[0m
+    [1m}[0m
+[1m}[0m
+
+
+
+TOOL: file_search
+            PURPOSE: Search for files in a directory based on a query 
+            JSON FORMAT: [1m{[0m
+    [32m"properties"[0m: [1m{[0m
+        [32m"request"[0m: [1m{[0m
+            [32m"default"[0m: [32m"file_search"[0m,
+            [32m"type"[0m: [32m"string"[0m
+        [1m}[0m,
+        [32m"directory"[0m: [1m{[0m
+            [32m"description"[0m: [32m"Directory to search in"[0m,
+            [32m"type"[0m: [32m"string"[0m
+        [1m}[0m,
+        [32m"query"[0m: [1m{[0m
+            [32m"description"[0m: [32m"Search query to find relevant files"[0m,
+            [32m"type"[0m: [32m"string"[0m
+        [1m}[0m
+    [1m}[0m,
+    [32m"required"[0m: [1m[[0m
+        [32m"directory"[0m,
+        [32m"query"[0m,
+        [32m"request"[0m
+    [1m][0m,
+    [32m"type"[0m: [32m"object"[0m,
+    [32m"request"[0m: [1m{[0m
+        [32m"enum"[0m: [1m[[0m
+            [32m"file_search"[0m
+        [1m][0m,
+        [32m"type"[0m: [32m"string"[0m
+    [1m}[0m
+[1m}[0m
+
+
+
+TOOL: write_file
+            PURPOSE: Write content to a file 
+            JSON FORMAT: [1m{[0m
+    [32m"properties"[0m: [1m{[0m
+        [32m"request"[0m: [1m{[0m
+            [32m"default"[0m: [32m"write_file"[0m,
+            [32m"type"[0m: [32m"string"[0m
+        [1m}[0m,
+        [32m"path"[0m: [1m{[0m
+            [32m"description"[0m: [32m"The file path to write to"[0m,
+            [32m"type"[0m: [32m"string"[0m
+        [1m}[0m,
+        [32m"content"[0m: [1m{[0m
+            [32m"description"[0m: [32m"The content to write to the file"[0m,
+            [32m"type"[0m: [32m"string"[0m
+        [1m}[0m
+    [1m}[0m,
+    [32m"required"[0m: [1m[[0m
+        [32m"content"[0m,
+        [32m"path"[0m,
+        [32m"request"[0m
+    [1m][0m,
+    [32m"type"[0m: [32m"object"[0m,
+    [32m"request"[0m: [1m{[0m
+        [32m"enum"[0m: [1m[[0m
+            [32m"write_file"[0m
+        [1m][0m,
+        [32m"type"[0m: [32m"string"[0m
+    [1m}[0m
+[1m}[0m
+
+
+
+When one of the above TOOLs is applicable, you must express your 
+request as [32m"TOOL:"[0m followed by the request in the above format.[1m[[0m[35m/[0m[95mmagenta[0m[1m][0m
+*[1m([0morchestrator-assistant[1m)[0m [1m[[0mwhite[1m][0m Entity.USER [1m[[0m[35m/[0m[95mwhite[0m[1m][0m [1m[[0mblue[1m][0mEntity.USER[1m[[0m[35m/[0m[95mblue[0m[1m][0m[1m([0morchestrator-assistant[1m)[0m [1m([0m=>          [1m)[0m [1m([0mX           [1m)[0m       [1m([0m          [1m)[0m [1m[[0mblue[1m][0m
+        Find files about music in the myfiles directory and 
+        tell me which music-related people were discussed in those files.
+        [1m[[0m[35m/[0m[95mblue[0m[1m][0m
+ [1m([0morchestrator-assistant[1m)[0m [1m[[0mred[1m][0m Entity.USER [1m[[0m[35m/[0m[95mred[0m[1m][0m [1m[[0mblue[1m][0mEntity.USER[1m[[0m[35m/[0m[95mblue[0m[1m][0m[1m([0mEntity.USER[1m)[0m [1m([0m=>          [1m)[0m [1m([0mX           [1m)[0m       [1m([0m          [1m)[0m [1m[[0mblue[1m][0m[1m[[0mCANNOT RESPOND[1m][0m[1m[[0m[35m/[0m[95mblue[0m[1m][0m
+ [1m([0morchestrator-assistant[1m)[0m [1m[[0mred[1m][0m Entity.AGENT [1m[[0m[35m/[0m[95mred[0m[1m][0m
+*[1m([0morchestrator-assistant[1m)[0m [1m[[0mwhite[1m][0m Entity.LLM [1m[[0m[35m/[0m[95mwhite[0m[1m][0m [1m[[0mgreen[1m][0mEntity.LLM[1m[[0m[35m/[0m[95mgreen[0m[1m][0m[1m([0m          [1m)[0m [1m([0m=>          [1m)[0m [1m([0mX           [1m)[0m   [1;35mTOOL[0m[1m([0mfile_search[1m)[0m 
+[1m[[0mgreen[1m][0mTOOL:[1m{[0m[32m"request"[0m:[32m"file_search"[0m,[32m"directory"[0m:[32m"myfiles"[0m,[32m"query"[0m:[32m"music"[0m[1m}[0m[1m[[0m[35m/[0m[95mgreen[0m[1m][0m
+*[1m([0morchestrator-assistant[1m)[0m [1m[[0mwhite[1m][0m Entity.AGENT [1m[[0m[35m/[0m[95mwhite[0m[1m][0m [1m[[0mred[1m][0mEntity.AGENT[1m[[0m[35m/[0m[95mred[0m[1m][0m[1m([0morchestrator-assistant[1m)[0m [1m([0m=>          [1m)[0m [1m([0mX           [1m)[0m       [1m([0m          [1m)[0m [1m[[0mred[1m][0mbeethoven.md: This file is about Ludwig 
+van Beethoven, one of the most influential composers in Western classical music, detailing his symphonies and impact on musical history.
+beyonce.md: This file discusses Beyoncé, a highly influential artist, her musical evolution, albums, and impact on the music industry.
+bill_evans.md: This file describes Bill Evans, a revolutionary jazz pianist, his harmonic innovations, and his significant influence on modern jazz piano.[1m[[0m[35m/[0m[95mred[0m[1m][0m
+ [1m([0morchestrator-assistant[1m)[0m [1m[[0mred[1m][0m Entity.USER [1m[[0m[35m/[0m[95mred[0m[1m][0m [1m[[0mblue[1m][0mEntity.USER[1m[[0m[35m/[0m[95mblue[0m[1m][0m[1m([0mEntity.USER[1m)[0m [1m([0m=>          [1m)[0m [1m([0mX           [1m)[0m       [1m([0m          [1m)[0m [1m[[0mblue[1m][0m[1m[[0mCANNOT RESPOND[1m][0m[1m[[0m[35m/[0m[95mblue[0m[1m][0m
+ [1m([0morchestrator-assistant[1m)[0m [1m[[0mred[1m][0m Entity.AGENT [1m[[0m[35m/[0m[95mred[0m[1m][0m [1m[[0mred[1m][0mEntity.AGENT[1m[[0m[35m/[0m[95mred[0m[1m][0m[1m([0mEntity.AGENT[1m)[0m [1m([0m=>          [1m)[0m [1m([0mX           [1m)[0m       [1m([0m          [1m)[0m [1m[[0mred[1m][0m[1m[[0mCANNOT RESPOND[1m][0m[1m[[0m[35m/[0m[95mred[0m[1m][0m
+*[1m([0morchestrator-assistant[1m)[0m [1m[[0mwhite[1m][0m Entity.LLM [1m[[0m[35m/[0m[95mwhite[0m[1m][0m [1m[[0mgreen[1m][0mEntity.LLM[1m[[0m[35m/[0m[95mgreen[0m[1m][0m[1m([0m          [1m)[0m [1m([0m=>          [1m)[0m [1m([0mX           [1m)[0m   [1;35mTOOL[0m[1m([0m done_tool[1m)[0m [1m[[0mgreen[1m][0mTOOL:[1m{[0m[32m"request"[0m:[32m"done_tool"[0m,[32m"content"[0m:[32m"The [0m
+[32mmusic-related people discussed in the files are Ludwig van Beethoven, Beyoncé, and Bill Evans."[0m[1m}[0m[1m[[0m[35m/[0m[95mgreen[0m[1m][0m
+*[1m([0morchestrator-assistant[1m)[0m [1m[[0mwhite[1m][0m Entity.SYSTEM [1m[[0m[35m/[0m[95mwhite[0m[1m][0m [1m[[0mmagenta[1m][0mEntity.SYSTEM[1m[[0m[35m/[0m[95mmagenta[0m[1m][0m[1m([0morchestrator-assistant[1m)[0m [1m([0m=>          [1m)[0m [1m([0mX           [1m)[0m       [1m([0m          [1m)[0m [1m[[0mmagenta[1m][0mYou are the main file 
+assistant that can help a user with requests about files.
+
+    You have access to the following tools:
+    `file_search`: Use this tool to search for the file
+    `TODO:file-summarize`: Use this tool to search for the file
+    `write_file`: Use this tool to write contents to the file
+    `done_tool`: Use this when your task is complete to return the final result.
+    
+    
+    CRITICAL: You CANNOT use multiple tools at once! You must use ONE tool at a time,
+        wait for the result, and THEN decide what to do next.
+
+    When your task is complete, you MUST use the `done_tool` tool to 
+    indicate completion, and use the `content` field to return any response you wish to 
+    provide. It is CRITICAL to use the `content` field to return any results 
+    sought by the user, since they will NOT be able to see anything outside of this tool!
+    
+
+=== GUIDELINES ON SOME TOOLS/FUNCTIONS USAGE ===
+            TOOL: done_tool:
+                        GUIDANCE: 
+        When you determine your task is finished, 
+        use the tool `done_tool` to signal this,
+        along with any message or result, in the `content` field. 
+
+        IMPORTANT: When using this or any other tool/function, you MUST include a 
+        `request` field and set it equal to the FUNCTION/TOOL NAME you intend to use.
+
+
+
+
+TOOL: TODO:file-summarize:
+                        GUIDANCE: 
+        IMPORTANT: When using this or any other tool/function, you MUST include a 
+        `request` field and set it equal to the FUNCTION/TOOL NAME you intend to use.
+
+
+
+
+TOOL: file_search:
+                        GUIDANCE: 
+        IMPORTANT: When using this or any other tool/function, you MUST include a 
+        `request` field and set it equal to the FUNCTION/TOOL NAME you intend to use.
+
+
+
+
+TOOL: write_file:
+                        GUIDANCE: 
+        IMPORTANT: When using this or any other tool/function, you MUST include a 
+        `request` field and set it equal to the FUNCTION/TOOL NAME you intend to use.
+
+
+
+
+
+
+=== ALL AVAILABLE TOOLS and THEIR FORMAT INSTRUCTIONS ===
+You have access to the following TOOLS to accomplish your task:
+
+TOOL: done_tool
+            PURPOSE: 
+    To signal the current task is done, along with an optional message [1m<[0m[1;95mcontent[0m[1m>[0m
+    of arbitrary type [1m([0mdefault [3;35mNone[0m[1m)[0m.
+
+            JSON FORMAT: [1m{[0m
+    [32m"properties"[0m: [1m{[0m
+        [32m"request"[0m: [1m{[0m
+            [32m"default"[0m: [32m"done_tool"[0m,
+            [32m"type"[0m: [32m"string"[0m
+        [1m}[0m,
+        [32m"content"[0m: [1m{[0m
+            [32m"default"[0m: [32m""[0m,
+            [32m"type"[0m: [32m"string"[0m
+        [1m}[0m
+    [1m}[0m,
+    [32m"type"[0m: [32m"object"[0m,
+    [32m"required"[0m: [1m[[0m
+        [32m"request"[0m
+    [1m][0m,
+    [32m"request"[0m: [1m{[0m
+        [32m"enum"[0m: [1m[[0m
+            [32m"done_tool"[0m
+        [1m][0m,
+        [32m"type"[0m: [32m"string"[0m
+    [1m}[0m
+[1m}[0m
+
+
+
+TOOL: TODO:file-summarize
+            PURPOSE: The purpose of this tool is to summarize files 
+            JSON FORMAT: [1m{[0m
+    [32m"properties"[0m: [1m{[0m
+        [32m"request"[0m: [1m{[0m
+            [32m"default"[0m: [32m"TODO:file-summarize"[0m,
+            [32m"type"[0m: [32m"string"[0m
+        [1m}[0m,
+        [32m"file_path"[0m: [1m{[0m
+            [32m"description"[0m: [32m"The file path to summarize contents from"[0m,
+            [32m"type"[0m: [32m"string"[0m
+        [1m}[0m
+    [1m}[0m,
+    [32m"required"[0m: [1m[[0m
+        [32m"file_path"[0m,
+        [32m"request"[0m
+    [1m][0m,
+    [32m"type"[0m: [32m"object"[0m,
+    [32m"request"[0m: [1m{[0m
+        [32m"enum"[0m: [1m[[0m
+            [32m"TODO:file-summarize"[0m
+        [1m][0m,
+        [32m"type"[0m: [32m"string"[0m
+    [1m}[0m
+[1m}[0m
+
+
+
+TOOL: file_search
+            PURPOSE: Search for files in a directory based on a query 
+            JSON FORMAT: [1m{[0m
+    [32m"properties"[0m: [1m{[0m
+        [32m"request"[0m: [1m{[0m
+            [32m"default"[0m: [32m"file_search"[0m,
+            [32m"type"[0m: [32m"string"[0m
+        [1m}[0m,
+        [32m"directory"[0m: [1m{[0m
+            [32m"description"[0m: [32m"Directory to search in"[0m,
+            [32m"type"[0m: [32m"string"[0m
+        [1m}[0m,
+        [32m"query"[0m: [1m{[0m
+            [32m"description"[0m: [32m"Search query to find relevant files"[0m,
+            [32m"type"[0m: [32m"string"[0m
+        [1m}[0m
+    [1m}[0m,
+    [32m"required"[0m: [1m[[0m
+        [32m"directory"[0m,
+        [32m"query"[0m,
+        [32m"request"[0m
+    [1m][0m,
+    [32m"type"[0m: [32m"object"[0m,
+    [32m"request"[0m: [1m{[0m
+        [32m"enum"[0m: [1m[[0m
+            [32m"file_search"[0m
+        [1m][0m,
+        [32m"type"[0m: [32m"string"[0m
+    [1m}[0m
+[1m}[0m
+
+
+
+TOOL: write_file
+            PURPOSE: Write content to a file 
+            JSON FORMAT: [1m{[0m
+    [32m"properties"[0m: [1m{[0m
+        [32m"request"[0m: [1m{[0m
+            [32m"default"[0m: [32m"write_file"[0m,
+            [32m"type"[0m: [32m"string"[0m
+        [1m}[0m,
+        [32m"path"[0m: [1m{[0m
+            [32m"description"[0m: [32m"The file path to write to"[0m,
+            [32m"type"[0m: [32m"string"[0m
+        [1m}[0m,
+        [32m"content"[0m: [1m{[0m
+            [32m"description"[0m: [32m"The content to write to the file"[0m,
+            [32m"type"[0m: [32m"string"[0m
+        [1m}[0m
+    [1m}[0m,
+    [32m"required"[0m: [1m[[0m
+        [32m"content"[0m,
+        [32m"path"[0m,
+        [32m"request"[0m
+    [1m][0m,
+    [32m"type"[0m: [32m"object"[0m,
+    [32m"request"[0m: [1m{[0m
+        [32m"enum"[0m: [1m[[0m
+            [32m"write_file"[0m
+        [1m][0m,
+        [32m"type"[0m: [32m"string"[0m
+    [1m}[0m
+[1m}[0m
+
+
+
+When one of the above TOOLs is applicable, you must express your 
+request as [32m"TOOL:"[0m followed by the request in the above format.[1m[[0m[35m/[0m[95mmagenta[0m[1m][0m
+*[1m([0morchestrator-assistant[1m)[0m [1m[[0mwhite[1m][0m Entity.USER [1m[[0m[35m/[0m[95mwhite[0m[1m][0m [1m[[0mblue[1m][0mEntity.USER[1m[[0m[35m/[0m[95mblue[0m[1m][0m[1m([0morchestrator-assistant[1m)[0m [1m([0m=>          [1m)[0m [1m([0mX           [1m)[0m       [1m([0m          [1m)[0m [1m[[0mblue[1m][0m
+        Search for files about finance in myfiles and write 
+        a file-by file summary to myfiles/test_summary.txt, formatted 
+        in markdown, with each header being the topic of the file, and the file-path
+        [1m[[0m[35m/[0m[95mblue[0m[1m][0m
+ [1m([0morchestrator-assistant[1m)[0m [1m[[0mred[1m][0m Entity.USER [1m[[0m[35m/[0m[95mred[0m[1m][0m [1m[[0mblue[1m][0mEntity.USER[1m[[0m[35m/[0m[95mblue[0m[1m][0m[1m([0mEntity.USER[1m)[0m [1m([0m=>          [1m)[0m [1m([0mX           [1m)[0m       [1m([0m          [1m)[0m [1m[[0mblue[1m][0m[1m[[0mCANNOT RESPOND[1m][0m[1m[[0m[35m/[0m[95mblue[0m[1m][0m
+ [1m([0morchestrator-assistant[1m)[0m [1m[[0mred[1m][0m Entity.AGENT [1m[[0m[35m/[0m[95mred[0m[1m][0m
+*[1m([0morchestrator-assistant[1m)[0m [1m[[0mwhite[1m][0m Entity.LLM [1m[[0m[35m/[0m[95mwhite[0m[1m][0m [1m[[0mgreen[1m][0mEntity.LLM[1m[[0m[35m/[0m[95mgreen[0m[1m][0m[1m([0m          [1m)[0m [1m([0m=>          [1m)[0m [1m([0mX           [1m)[0m   [1;35mTOOL[0m[1m([0mfile_search[1m)[0m 
+[1m[[0mgreen[1m][0mTOOL:[1m{[0m[32m"request"[0m:[32m"file_search"[0m,[32m"directory"[0m:[32m"myfiles"[0m,[32m"query"[0m:[32m"finance"[0m[1m}[0m[1m[[0m[35m/[0m[95mgreen[0m[1m][0m
+*[1m([0morchestrator-assistant[1m)[0m [1m[[0mwhite[1m][0m Entity.AGENT [1m[[0m[35m/[0m[95mwhite[0m[1m][0m [1m[[0mred[1m][0mEntity.AGENT[1m[[0m[35m/[0m[95mred[0m[1m][0m[1m([0morchestrator-assistant[1m)[0m [1m([0m=>          [1m)[0m [1m([0mX           [1m)[0m       [1m([0m          [1m)[0m [1m[[0mred[1m][0mbudgeting_tips.md: This file contains 
+information on [32m"Smart Budgeting Techniques,"[0m discussing financial health, income allocation, savings, and debt repayment, which are core concepts in finance.
+debt_management.md: This file focuses on [32m"Effective Debt Management,"[0m covering strategies for handling debt, credit cards, emergency funds, mortgages, and student loans, all of which are financial 
+topics.
+investment_basics.md: This file explains [32m"Investment Fundamentals,"[0m including building wealth, risk vs. reward, diversification, stocks, bonds, real estate, and dollar-cost averaging, which are key 
+aspects of finance.[1m[[0m[35m/[0m[95mred[0m[1m][0m
+ [1m([0morchestrator-assistant[1m)[0m [1m[[0mred[1m][0m Entity.USER [1m[[0m[35m/[0m[95mred[0m[1m][0m [1m[[0mblue[1m][0mEntity.USER[1m[[0m[35m/[0m[95mblue[0m[1m][0m[1m([0mEntity.USER[1m)[0m [1m([0m=>          [1m)[0m [1m([0mX           [1m)[0m       [1m([0m          [1m)[0m [1m[[0mblue[1m][0m[1m[[0mCANNOT RESPOND[1m][0m[1m[[0m[35m/[0m[95mblue[0m[1m][0m
+ [1m([0morchestrator-assistant[1m)[0m [1m[[0mred[1m][0m Entity.AGENT [1m[[0m[35m/[0m[95mred[0m[1m][0m [1m[[0mred[1m][0mEntity.AGENT[1m[[0m[35m/[0m[95mred[0m[1m][0m[1m([0mEntity.AGENT[1m)[0m [1m([0m=>          [1m)[0m [1m([0mX           [1m)[0m       [1m([0m          [1m)[0m [1m[[0mred[1m][0m[1m[[0mCANNOT RESPOND[1m][0m[1m[[0m[35m/[0m[95mred[0m[1m][0m
+*[1m([0morchestrator-assistant[1m)[0m [1m[[0mwhite[1m][0m Entity.LLM [1m[[0m[35m/[0m[95mwhite[0m[1m][0m [1m[[0mgreen[1m][0mEntity.LLM[1m[[0m[35m/[0m[95mgreen[0m[1m][0m[1m([0m          [1m)[0m [1m([0m=>          [1m)[0m [1m([0mX           [1m)[0m   [1;35mTOOL[0m[1m([0mwrite_file[1m)[0m 
+[1m[[0mgreen[1m][0mTOOL:[1m{[0m[32m"request"[0m:[32m"write_file"[0m,[32m"path"[0m:[32m"myfiles/test_summary.txt"[0m,[32m"content"[0m:[32m"# Smart Budgeting Techniques\n\nFile Path: myfiles/budgeting_tips.md\n\nThis file contains information on \"Smart [0m
+[32mBudgeting Techniques,\" discussing financial health, income allocation, savings, and debt repayment, which are core concepts in finance.\n\n# Effective Debt Management\n\nFile Path: [0m
+[32mmyfiles/debt_management.md\n\nThis file focuses on \"Effective Debt Management,\" covering strategies for handling debt, credit cards, emergency funds, mortgages, and student loans, all of which are [0m
+[32mfinancial topics.\n\n# Investment Fundamentals\n\nFile Path: myfiles/investment_basics.md\n\nThis file explains \"Investment Fundamentals,\" including building wealth, risk vs. reward, [0m
+[32mdiversification, stocks, bonds, real estate, and dollar-cost averaging, which are key aspects of finance."[0m[1m}[0m[1m[[0m[35m/[0m[95mgreen[0m[1m][0m
+*[1m([0morchestrator-assistant[1m)[0m [1m[[0mwhite[1m][0m Entity.AGENT [1m[[0m[35m/[0m[95mwhite[0m[1m][0m [1m[[0mred[1m][0mEntity.AGENT[1m[[0m[35m/[0m[95mred[0m[1m][0m[1m([0morchestrator-assistant[1m)[0m [1m([0m=>          [1m)[0m [1m([0mX           [1m)[0m       [1m([0m          [1m)[0m [1m[[0mred[1m][0mSuccessfully wrote to 
+myfiles/test_summary.txt[1m[[0m[35m/[0m[95mred[0m[1m][0m
+ [1m([0morchestrator-assistant[1m)[0m [1m[[0mred[1m][0m Entity.USER [1m[[0m[35m/[0m[95mred[0m[1m][0m [1m[[0mblue[1m][0mEntity.USER[1m[[0m[35m/[0m[95mblue[0m[1m][0m[1m([0mEntity.USER[1m)[0m [1m([0m=>          [1m)[0m [1m([0mX           [1m)[0m       [1m([0m          [1m)[0m [1m[[0mblue[1m][0m[1m[[0mCANNOT RESPOND[1m][0m[1m[[0m[35m/[0m[95mblue[0m[1m][0m
+ [1m([0morchestrator-assistant[1m)[0m [1m[[0mred[1m][0m Entity.AGENT [1m[[0m[35m/[0m[95mred[0m[1m][0m [1m[[0mred[1m][0mEntity.AGENT[1m[[0m[35m/[0m[95mred[0m[1m][0m[1m([0mEntity.AGENT[1m)[0m [1m([0m=>          [1m)[0m [1m([0mX           [1m)[0m       [1m([0m          [1m)[0m [1m[[0mred[1m][0m[1m[[0mCANNOT RESPOND[1m][0m[1m[[0m[35m/[0m[95mred[0m[1m][0m
+*[1m([0morchestrator-assistant[1m)[0m [1m[[0mwhite[1m][0m Entity.LLM [1m[[0m[35m/[0m[95mwhite[0m[1m][0m [1m[[0mgreen[1m][0mEntity.LLM[1m[[0m[35m/[0m[95mgreen[0m[1m][0m[1m([0m          [1m)[0m [1m([0m=>          [1m)[0m [1m([0mX           [1m)[0m   [1;35mTOOL[0m[1m([0m done_tool[1m)[0m [1m[[0mgreen[1m][0mTOOL:[1m{[0m[32m"request"[0m:[32m"done_tool"[0m,[32m"content"[0m:[32m"Successfully [0m
+[32msummarized finance-related files and wrote the summaries to myfiles/test_summary.txt."[0m[1m}[0m[1m[[0m[35m/[0m[95mgreen[0m[1m][0m
+*[1m([0morchestrator-assistant[1m)[0m [1m[[0mwhite[1m][0m Entity.SYSTEM [1m[[0m[35m/[0m[95mwhite[0m[1m][0m [1m[[0mmagenta[1m][0mEntity.SYSTEM[1m[[0m[35m/[0m[95mmagenta[0m[1m][0m[1m([0morchestrator-assistant[1m)[0m [1m([0m=>          [1m)[0m [1m([0mX           [1m)[0m       [1m([0m          [1m)[0m [1m[[0mmagenta[1m][0mYou are the main file 
+assistant that can help a user with requests about files.
+
+    You have access to the following tools:
+    `file_search`: Use this tool to search for the file
+    `file-summarize`: Use this tool to search for the file
+    `write_file`: Use this tool to write contents to the file
+    `done_tool`: Use this when your task is complete to return the final result.
+    
+    
+    CRITICAL: You CANNOT use multiple tools at once! You must use ONE tool at a time,
+        wait for the result, and THEN decide what to do next.
+
+    When your task is complete, you MUST use the `done_tool` tool to 
+    indicate completion, and use the `content` field to return any response you wish to 
+    provide. It is CRITICAL to use the `content` field to return any results 
+    sought by the user, since they will NOT be able to see anything outside of this tool!
+    
+
+=== GUIDELINES ON SOME TOOLS/FUNCTIONS USAGE ===
+            TOOL: done_tool:
+                        GUIDANCE: 
+        When you determine your task is finished, 
+        use the tool `done_tool` to signal this,
+        along with any message or result, in the `content` field. 
+
+        IMPORTANT: When using this or any other tool/function, you MUST include a 
+        `request` field and set it equal to the FUNCTION/TOOL NAME you intend to use.
+
+
+
+
+TOOL: file-summarize:
+                        GUIDANCE: 
+        IMPORTANT: When using this or any other tool/function, you MUST include a 
+        `request` field and set it equal to the FUNCTION/TOOL NAME you intend to use.
+
+
+
+
+TOOL: file_search:
+                        GUIDANCE: 
+        IMPORTANT: When using this or any other tool/function, you MUST include a 
+        `request` field and set it equal to the FUNCTION/TOOL NAME you intend to use.
+
+
+
+
+TOOL: write_file:
+                        GUIDANCE: 
+        IMPORTANT: When using this or any other tool/function, you MUST include a 
+        `request` field and set it equal to the FUNCTION/TOOL NAME you intend to use.
+
+
+
+
+
+
+=== ALL AVAILABLE TOOLS and THEIR FORMAT INSTRUCTIONS ===
+You have access to the following TOOLS to accomplish your task:
+
+TOOL: done_tool
+            PURPOSE: 
+    To signal the current task is done, along with an optional message [1m<[0m[1;95mcontent[0m[1m>[0m
+    of arbitrary type [1m([0mdefault [3;35mNone[0m[1m)[0m.
+
+            JSON FORMAT: [1m{[0m
+    [32m"properties"[0m: [1m{[0m
+        [32m"request"[0m: [1m{[0m
+            [32m"default"[0m: [32m"done_tool"[0m,
+            [32m"type"[0m: [32m"string"[0m
+        [1m}[0m,
+        [32m"content"[0m: [1m{[0m
+            [32m"default"[0m: [32m""[0m,
+            [32m"type"[0m: [32m"string"[0m
+        [1m}[0m
+    [1m}[0m,
+    [32m"type"[0m: [32m"object"[0m,
+    [32m"required"[0m: [1m[[0m
+        [32m"request"[0m
+    [1m][0m,
+    [32m"request"[0m: [1m{[0m
+        [32m"enum"[0m: [1m[[0m
+            [32m"done_tool"[0m
+        [1m][0m,
+        [32m"type"[0m: [32m"string"[0m
+    [1m}[0m
+[1m}[0m
+
+
+
+TOOL: file-summarize
+            PURPOSE: The purpose of this tool is to summarize files 
+            JSON FORMAT: [1m{[0m
+    [32m"properties"[0m: [1m{[0m
+        [32m"request"[0m: [1m{[0m
+            [32m"default"[0m: [32m"file-summarize"[0m,
+            [32m"type"[0m: [32m"string"[0m
+        [1m}[0m,
+        [32m"file_path"[0m: [1m{[0m
+            [32m"description"[0m: [32m"The file path to summarize contents from"[0m,
+            [32m"type"[0m: [32m"string"[0m
+        [1m}[0m
+    [1m}[0m,
+    [32m"required"[0m: [1m[[0m
+        [32m"file_path"[0m,
+        [32m"request"[0m
+    [1m][0m,
+    [32m"type"[0m: [32m"object"[0m,
+    [32m"request"[0m: [1m{[0m
+        [32m"enum"[0m: [1m[[0m
+            [32m"file-summarize"[0m
+        [1m][0m,
+        [32m"type"[0m: [32m"string"[0m
+    [1m}[0m
+[1m}[0m
+
+
+
+TOOL: file_search
+            PURPOSE: Search for files in a directory based on a query 
+            JSON FORMAT: [1m{[0m
+    [32m"properties"[0m: [1m{[0m
+        [32m"request"[0m: [1m{[0m
+            [32m"default"[0m: [32m"file_search"[0m,
+            [32m"type"[0m: [32m"string"[0m
+        [1m}[0m,
+        [32m"directory"[0m: [1m{[0m
+            [32m"description"[0m: [32m"Directory to search in"[0m,
+            [32m"type"[0m: [32m"string"[0m
+        [1m}[0m,
+        [32m"query"[0m: [1m{[0m
+            [32m"description"[0m: [32m"Search query to find relevant files"[0m,
+            [32m"type"[0m: [32m"string"[0m
+        [1m}[0m
+    [1m}[0m,
+    [32m"required"[0m: [1m[[0m
+        [32m"directory"[0m,
+        [32m"query"[0m,
+        [32m"request"[0m
+    [1m][0m,
+    [32m"type"[0m: [32m"object"[0m,
+    [32m"request"[0m: [1m{[0m
+        [32m"enum"[0m: [1m[[0m
+            [32m"file_search"[0m
+        [1m][0m,
+        [32m"type"[0m: [32m"string"[0m
+    [1m}[0m
+[1m}[0m
+
+
+
+TOOL: write_file
+            PURPOSE: Write content to a file 
+            JSON FORMAT: [1m{[0m
+    [32m"properties"[0m: [1m{[0m
+        [32m"request"[0m: [1m{[0m
+            [32m"default"[0m: [32m"write_file"[0m,
+            [32m"type"[0m: [32m"string"[0m
+        [1m}[0m,
+        [32m"path"[0m: [1m{[0m
+            [32m"description"[0m: [32m"The file path to write to"[0m,
+            [32m"type"[0m: [32m"string"[0m
+        [1m}[0m,
+        [32m"content"[0m: [1m{[0m
+            [32m"description"[0m: [32m"The content to write to the file"[0m,
+            [32m"type"[0m: [32m"string"[0m
+        [1m}[0m
+    [1m}[0m,
+    [32m"required"[0m: [1m[[0m
+        [32m"content"[0m,
+        [32m"path"[0m,
+        [32m"request"[0m
+    [1m][0m,
+    [32m"type"[0m: [32m"object"[0m,
+    [32m"request"[0m: [1m{[0m
+        [32m"enum"[0m: [1m[[0m
+            [32m"write_file"[0m
+        [1m][0m,
+        [32m"type"[0m: [32m"string"[0m
+    [1m}[0m
+[1m}[0m
+
+
+
+When one of the above TOOLs is applicable, you must express your 
+request as [32m"TOOL:"[0m followed by the request in the above format.[1m[[0m[35m/[0m[95mmagenta[0m[1m][0m
+*[1m([0morchestrator-assistant[1m)[0m [1m[[0mwhite[1m][0m Entity.USER [1m[[0m[35m/[0m[95mwhite[0m[1m][0m [1m[[0mblue[1m][0mEntity.USER[1m[[0m[35m/[0m[95mblue[0m[1m][0m[1m([0morchestrator-assistant[1m)[0m [1m([0m=>          [1m)[0m [1m([0mX           [1m)[0m       [1m([0m          [1m)[0m [1m[[0mblue[1m][0m
+        Find files about music in the myfiles directory and 
+        tell me which music-related people were discussed in those files.
+        [1m[[0m[35m/[0m[95mblue[0m[1m][0m
+ [1m([0morchestrator-assistant[1m)[0m [1m[[0mred[1m][0m Entity.USER [1m[[0m[35m/[0m[95mred[0m[1m][0m [1m[[0mblue[1m][0mEntity.USER[1m[[0m[35m/[0m[95mblue[0m[1m][0m[1m([0mEntity.USER[1m)[0m [1m([0m=>          [1m)[0m [1m([0mX           [1m)[0m       [1m([0m          [1m)[0m [1m[[0mblue[1m][0m[1m[[0mCANNOT RESPOND[1m][0m[1m[[0m[35m/[0m[95mblue[0m[1m][0m
+ [1m([0morchestrator-assistant[1m)[0m [1m[[0mred[1m][0m Entity.AGENT [1m[[0m[35m/[0m[95mred[0m[1m][0m
+*[1m([0morchestrator-assistant[1m)[0m [1m[[0mwhite[1m][0m Entity.LLM [1m[[0m[35m/[0m[95mwhite[0m[1m][0m [1m[[0mgreen[1m][0mEntity.LLM[1m[[0m[35m/[0m[95mgreen[0m[1m][0m[1m([0m          [1m)[0m [1m([0m=>          [1m)[0m [1m([0mX           [1m)[0m   [1;35mTOOL[0m[1m([0mfile_search[1m)[0m [1m[[0mgreen[1m][0mTOOL: [1m{[0m[32m"request"[0m: [32m"file_search"[0m, [32m"directory"[0m: 
+[32m"myfiles"[0m, [32m"query"[0m: [32m"music"[0m[1m}[0m[1m[[0m[35m/[0m[95mgreen[0m[1m][0m
+*[1m([0morchestrator-assistant[1m)[0m [1m[[0mwhite[1m][0m Entity.AGENT [1m[[0m[35m/[0m[95mwhite[0m[1m][0m [1m[[0mred[1m][0mEntity.AGENT[1m[[0m[35m/[0m[95mred[0m[1m][0m[1m([0morchestrator-assistant[1m)[0m [1m([0m=>          [1m)[0m [1m([0mX           [1m)[0m       [1m([0m          [1m)[0m [1m[[0mred[1m][0mbeethoven.md: This file is about Ludwig 
+van Beethoven, a highly influential classical composer, detailing his works like symphonies and his impact on Western classical music.
+beyonce.md: This file discusses Beyoncé, a prominent artist, her musical evolution, Grammy awards, and influence on the music industry and pop music.
+bill_evans.md: This file describes Bill Evans, a revolutionary jazz pianist, his approach to jazz, harmonic innovations, and significant influence on modern jazz piano.[1m[[0m[35m/[0m[95mred[0m[1m][0m
+ [1m([0morchestrator-assistant[1m)[0m [1m[[0mred[1m][0m Entity.USER [1m[[0m[35m/[0m[95mred[0m[1m][0m [1m[[0mblue[1m][0mEntity.USER[1m[[0m[35m/[0m[95mblue[0m[1m][0m[1m([0mEntity.USER[1m)[0m [1m([0m=>          [1m)[0m [1m([0mX           [1m)[0m       [1m([0m          [1m)[0m [1m[[0mblue[1m][0m[1m[[0mCANNOT RESPOND[1m][0m[1m[[0m[35m/[0m[95mblue[0m[1m][0m
+ [1m([0morchestrator-assistant[1m)[0m [1m[[0mred[1m][0m Entity.AGENT [1m[[0m[35m/[0m[95mred[0m[1m][0m [1m[[0mred[1m][0mEntity.AGENT[1m[[0m[35m/[0m[95mred[0m[1m][0m[1m([0mEntity.AGENT[1m)[0m [1m([0m=>          [1m)[0m [1m([0mX           [1m)[0m       [1m([0m          [1m)[0m [1m[[0mred[1m][0m[1m[[0mCANNOT RESPOND[1m][0m[1m[[0m[35m/[0m[95mred[0m[1m][0m
+*[1m([0morchestrator-assistant[1m)[0m [1m[[0mwhite[1m][0m Entity.LLM [1m[[0m[35m/[0m[95mwhite[0m[1m][0m [1m[[0mgreen[1m][0mEntity.LLM[1m[[0m[35m/[0m[95mgreen[0m[1m][0m[1m([0m          [1m)[0m [1m([0m=>          [1m)[0m [1m([0mX           [1m)[0m   [1;35mTOOL[0m[1m([0m done_tool[1m)[0m [1m[[0mgreen[1m][0mTOOL: [1m{[0m[32m"request"[0m: [32m"done_tool"[0m, [32m"content"[0m: [32m"The [0m
+[32mmusic-related people discussed in the files are Ludwig van Beethoven, Beyoncé, and Bill Evans."[0m[1m}[0m[1m[[0m[35m/[0m[95mgreen[0m[1m][0m
+*[1m([0morchestrator-assistant[1m)[0m [1m[[0mwhite[1m][0m Entity.SYSTEM [1m[[0m[35m/[0m[95mwhite[0m[1m][0m [1m[[0mmagenta[1m][0mEntity.SYSTEM[1m[[0m[35m/[0m[95mmagenta[0m[1m][0m[1m([0morchestrator-assistant[1m)[0m [1m([0m=>          [1m)[0m [1m([0mX           [1m)[0m       [1m([0m          [1m)[0m [1m[[0mmagenta[1m][0mYou are the main file 
+assistant that can help a user with requests about files.
+
+    You have access to the following tools:
+    `file_search`: Use this tool to search for the file
+    `file-summarize`: Use this tool to search for the file
+    `write_file`: Use this tool to write contents to the file
+    `done_tool`: Use this when your task is complete to return the final result.
+    
+    
+    CRITICAL: You CANNOT use multiple tools at once! You must use ONE tool at a time,
+        wait for the result, and THEN decide what to do next.
+
+    When your task is complete, you MUST use the `done_tool` tool to 
+    indicate completion, and use the `content` field to return any response you wish to 
+    provide. It is CRITICAL to use the `content` field to return any results 
+    sought by the user, since they will NOT be able to see anything outside of this tool!
+    
+
+=== GUIDELINES ON SOME TOOLS/FUNCTIONS USAGE ===
+            TOOL: done_tool:
+                        GUIDANCE: 
+        When you determine your task is finished, 
+        use the tool `done_tool` to signal this,
+        along with any message or result, in the `content` field. 
+
+        IMPORTANT: When using this or any other tool/function, you MUST include a 
+        `request` field and set it equal to the FUNCTION/TOOL NAME you intend to use.
+
+
+
+
+TOOL: file-summarize:
+                        GUIDANCE: 
+        IMPORTANT: When using this or any other tool/function, you MUST include a 
+        `request` field and set it equal to the FUNCTION/TOOL NAME you intend to use.
+
+
+
+
+TOOL: file_search:
+                        GUIDANCE: 
+        IMPORTANT: When using this or any other tool/function, you MUST include a 
+        `request` field and set it equal to the FUNCTION/TOOL NAME you intend to use.
+
+
+
+
+TOOL: write_file:
+                        GUIDANCE: 
+        IMPORTANT: When using this or any other tool/function, you MUST include a 
+        `request` field and set it equal to the FUNCTION/TOOL NAME you intend to use.
+
+
+
+
+
+
+=== ALL AVAILABLE TOOLS and THEIR FORMAT INSTRUCTIONS ===
+You have access to the following TOOLS to accomplish your task:
+
+TOOL: done_tool
+            PURPOSE: 
+    To signal the current task is done, along with an optional message [1m<[0m[1;95mcontent[0m[1m>[0m
+    of arbitrary type [1m([0mdefault [3;35mNone[0m[1m)[0m.
+
+            JSON FORMAT: [1m{[0m
+    [32m"properties"[0m: [1m{[0m
+        [32m"request"[0m: [1m{[0m
+            [32m"default"[0m: [32m"done_tool"[0m,
+            [32m"type"[0m: [32m"string"[0m
+        [1m}[0m,
+        [32m"content"[0m: [1m{[0m
+            [32m"default"[0m: [32m""[0m,
+            [32m"type"[0m: [32m"string"[0m
+        [1m}[0m
+    [1m}[0m,
+    [32m"type"[0m: [32m"object"[0m,
+    [32m"required"[0m: [1m[[0m
+        [32m"request"[0m
+    [1m][0m,
+    [32m"request"[0m: [1m{[0m
+        [32m"enum"[0m: [1m[[0m
+            [32m"done_tool"[0m
+        [1m][0m,
+        [32m"type"[0m: [32m"string"[0m
+    [1m}[0m
+[1m}[0m
+
+
+
+TOOL: file-summarize
+            PURPOSE: The purpose of this tool is to summarize files 
+            JSON FORMAT: [1m{[0m
+    [32m"properties"[0m: [1m{[0m
+        [32m"request"[0m: [1m{[0m
+            [32m"default"[0m: [32m"file-summarize"[0m,
+            [32m"type"[0m: [32m"string"[0m
+        [1m}[0m,
+        [32m"file_path"[0m: [1m{[0m
+            [32m"description"[0m: [32m"The file path to summarize contents from"[0m,
+            [32m"type"[0m: [32m"string"[0m
+        [1m}[0m
+    [1m}[0m,
+    [32m"required"[0m: [1m[[0m
+        [32m"file_path"[0m,
+        [32m"request"[0m
+    [1m][0m,
+    [32m"type"[0m: [32m"object"[0m,
+    [32m"request"[0m: [1m{[0m
+        [32m"enum"[0m: [1m[[0m
+            [32m"file-summarize"[0m
+        [1m][0m,
+        [32m"type"[0m: [32m"string"[0m
+    [1m}[0m
+[1m}[0m
+
+
+
+TOOL: file_search
+            PURPOSE: Search for files in a directory based on a query 
+            JSON FORMAT: [1m{[0m
+    [32m"properties"[0m: [1m{[0m
+        [32m"request"[0m: [1m{[0m
+            [32m"default"[0m: [32m"file_search"[0m,
+            [32m"type"[0m: [32m"string"[0m
+        [1m}[0m,
+        [32m"directory"[0m: [1m{[0m
+            [32m"description"[0m: [32m"Directory to search in"[0m,
+            [32m"type"[0m: [32m"string"[0m
+        [1m}[0m,
+        [32m"query"[0m: [1m{[0m
+            [32m"description"[0m: [32m"Search query to find relevant files"[0m,
+            [32m"type"[0m: [32m"string"[0m
+        [1m}[0m
+    [1m}[0m,
+    [32m"required"[0m: [1m[[0m
+        [32m"directory"[0m,
+        [32m"query"[0m,
+        [32m"request"[0m
+    [1m][0m,
+    [32m"type"[0m: [32m"object"[0m,
+    [32m"request"[0m: [1m{[0m
+        [32m"enum"[0m: [1m[[0m
+            [32m"file_search"[0m
+        [1m][0m,
+        [32m"type"[0m: [32m"string"[0m
+    [1m}[0m
+[1m}[0m
+
+
+
+TOOL: write_file
+            PURPOSE: Write content to a file 
+            JSON FORMAT: [1m{[0m
+    [32m"properties"[0m: [1m{[0m
+        [32m"request"[0m: [1m{[0m
+            [32m"default"[0m: [32m"write_file"[0m,
+            [32m"type"[0m: [32m"string"[0m
+        [1m}[0m,
+        [32m"path"[0m: [1m{[0m
+            [32m"description"[0m: [32m"The file path to write to"[0m,
+            [32m"type"[0m: [32m"string"[0m
+        [1m}[0m,
+        [32m"content"[0m: [1m{[0m
+            [32m"description"[0m: [32m"The content to write to the file"[0m,
+            [32m"type"[0m: [32m"string"[0m
+        [1m}[0m
+    [1m}[0m,
+    [32m"required"[0m: [1m[[0m
+        [32m"content"[0m,
+        [32m"path"[0m,
+        [32m"request"[0m
+    [1m][0m,
+    [32m"type"[0m: [32m"object"[0m,
+    [32m"request"[0m: [1m{[0m
+        [32m"enum"[0m: [1m[[0m
+            [32m"write_file"[0m
+        [1m][0m,
+        [32m"type"[0m: [32m"string"[0m
+    [1m}[0m
+[1m}[0m
+
+
+
+When one of the above TOOLs is applicable, you must express your 
+request as [32m"TOOL:"[0m followed by the request in the above format.[1m[[0m[35m/[0m[95mmagenta[0m[1m][0m
+*[1m([0morchestrator-assistant[1m)[0m [1m[[0mwhite[1m][0m Entity.USER [1m[[0m[35m/[0m[95mwhite[0m[1m][0m [1m[[0mblue[1m][0mEntity.USER[1m[[0m[35m/[0m[95mblue[0m[1m][0m[1m([0morchestrator-assistant[1m)[0m [1m([0m=>          [1m)[0m [1m([0mX           [1m)[0m       [1m([0m          [1m)[0m [1m[[0mblue[1m][0m
+        Search for files about finance in myfiles and write 
+        a file-by file summary to myfiles/test_summary.txt, formatted 
+        in markdown, with each header being the topic of the file, and the file-path
+        [1m[[0m[35m/[0m[95mblue[0m[1m][0m
+ [1m([0morchestrator-assistant[1m)[0m [1m[[0mred[1m][0m Entity.USER [1m[[0m[35m/[0m[95mred[0m[1m][0m [1m[[0mblue[1m][0mEntity.USER[1m[[0m[35m/[0m[95mblue[0m[1m][0m[1m([0mEntity.USER[1m)[0m [1m([0m=>          [1m)[0m [1m([0mX           [1m)[0m       [1m([0m          [1m)[0m [1m[[0mblue[1m][0m[1m[[0mCANNOT RESPOND[1m][0m[1m[[0m[35m/[0m[95mblue[0m[1m][0m
+ [1m([0morchestrator-assistant[1m)[0m [1m[[0mred[1m][0m Entity.AGENT [1m[[0m[35m/[0m[95mred[0m[1m][0m
+*[1m([0morchestrator-assistant[1m)[0m [1m[[0mwhite[1m][0m Entity.LLM [1m[[0m[35m/[0m[95mwhite[0m[1m][0m [1m[[0mgreen[1m][0mEntity.LLM[1m[[0m[35m/[0m[95mgreen[0m[1m][0m[1m([0m          [1m)[0m [1m([0m=>          [1m)[0m [1m([0mX           [1m)[0m   [1;35mTOOL[0m[1m([0mfile_search[1m)[0m [1m[[0mgreen[1m][0mTOOL: [1m{[0m
+  [32m"request"[0m: [32m"file_search"[0m,
+  [32m"directory"[0m: [32m"myfiles"[0m,
+  [32m"query"[0m: [32m"finance"[0m
+[1m}[0m[1m[[0m[35m/[0m[95mgreen[0m[1m][0m
+*[1m([0morchestrator-assistant[1m)[0m [1m[[0mwhite[1m][0m Entity.AGENT [1m[[0m[35m/[0m[95mwhite[0m[1m][0m [1m[[0mred[1m][0mEntity.AGENT[1m[[0m[35m/[0m[95mred[0m[1m][0m[1m([0morchestrator-assistant[1m)[0m [1m([0m=>          [1m)[0m [1m([0mX           [1m)[0m       [1m([0m          [1m)[0m [1m[[0mred[1m][0mbudgeting_tips.md: This file contains 
+[32m"Smart Budgeting Techniques"[0m which are directly related to managing personal finance, including concepts like the [1;36m50[0m/[1;36m30[0m/[1;36m20[0m rule, tracking expenses, and financial health.
+debt_management.md: This file discusses [32m"Effective Debt Management,"[0m a core aspect of personal finance, covering strategies like the avalanche and snowball methods, debt consolidation, and managing 
+credit cards.
+investment_basics.md: This file covers [32m"Investment Fundamentals,"[0m which is a key component of finance, explaining concepts such as risk versus reward, diversification, dollar-cost averaging, and 
+building long-term wealth.[1m[[0m[35m/[0m[95mred[0m[1m][0m
+ [1m([0morchestrator-assistant[1m)[0m [1m[[0mred[1m][0m Entity.USER [1m[[0m[35m/[0m[95mred[0m[1m][0m [1m[[0mblue[1m][0mEntity.USER[1m[[0m[35m/[0m[95mblue[0m[1m][0m[1m([0mEntity.USER[1m)[0m [1m([0m=>          [1m)[0m [1m([0mX           [1m)[0m       [1m([0m          [1m)[0m [1m[[0mblue[1m][0m[1m[[0mCANNOT RESPOND[1m][0m[1m[[0m[35m/[0m[95mblue[0m[1m][0m
+ [1m([0morchestrator-assistant[1m)[0m [1m[[0mred[1m][0m Entity.AGENT [1m[[0m[35m/[0m[95mred[0m[1m][0m [1m[[0mred[1m][0mEntity.AGENT[1m[[0m[35m/[0m[95mred[0m[1m][0m[1m([0mEntity.AGENT[1m)[0m [1m([0m=>          [1m)[0m [1m([0mX           [1m)[0m       [1m([0m          [1m)[0m [1m[[0mred[1m][0m[1m[[0mCANNOT RESPOND[1m][0m[1m[[0m[35m/[0m[95mred[0m[1m][0m
+*[1m([0morchestrator-assistant[1m)[0m [1m[[0mwhite[1m][0m Entity.LLM [1m[[0m[35m/[0m[95mwhite[0m[1m][0m [1m[[0mgreen[1m][0mEntity.LLM[1m[[0m[35m/[0m[95mgreen[0m[1m][0m[1m([0m          [1m)[0m [1m([0m=>          [1m)[0m [1m([0mX           [1m)[0m   [1;35mTOOL[0m[1m([0mwrite_file[1m)[0m [1m[[0mgreen[1m][0mTOOL: [1m{[0m
+  [32m"request"[0m: [32m"write_file"[0m,
+  [32m"path"[0m: [32m"myfiles/test_summary.txt"[0m,
+  [32m"content"[0m: [32m"# Smart Budgeting Techniques\n\nFile Path: budgeting_tips.md\n\nThis file contains \"Smart Budgeting Techniques\" which are directly related to managing personal finance, including [0m
+[32mconcepts like the 50/30/20 rule, tracking expenses, and financial health.\n\n# Effective Debt Management\n\nFile Path: debt_management.md\n\nThis file discusses \"Effective Debt Management,\" a core [0m
+[32maspect of personal finance, covering strategies like the avalanche and snowball methods, debt consolidation, and managing credit cards.\n\n# Investment Fundamentals\n\nFile Path: [0m
+[32minvestment_basics.md\n\nThis file covers \"Investment Fundamentals,\" which is a key component of finance, explaining concepts such as risk versus reward, diversification, dollar-cost averaging, and [0m
+[32mbuilding long-term wealth."[0m
+[1m}[0m[1m[[0m[35m/[0m[95mgreen[0m[1m][0m
+*[1m([0morchestrator-assistant[1m)[0m [1m[[0mwhite[1m][0m Entity.AGENT [1m[[0m[35m/[0m[95mwhite[0m[1m][0m [1m[[0mred[1m][0mEntity.AGENT[1m[[0m[35m/[0m[95mred[0m[1m][0m[1m([0morchestrator-assistant[1m)[0m [1m([0m=>          [1m)[0m [1m([0mX           [1m)[0m       [1m([0m          [1m)[0m [1m[[0mred[1m][0mSuccessfully wrote to 
+myfiles/test_summary.txt[1m[[0m[35m/[0m[95mred[0m[1m][0m
+ [1m([0morchestrator-assistant[1m)[0m [1m[[0mred[1m][0m Entity.USER [1m[[0m[35m/[0m[95mred[0m[1m][0m [1m[[0mblue[1m][0mEntity.USER[1m[[0m[35m/[0m[95mblue[0m[1m][0m[1m([0mEntity.USER[1m)[0m [1m([0m=>          [1m)[0m [1m([0mX           [1m)[0m       [1m([0m          [1m)[0m [1m[[0mblue[1m][0m[1m[[0mCANNOT RESPOND[1m][0m[1m[[0m[35m/[0m[95mblue[0m[1m][0m
+ [1m([0morchestrator-assistant[1m)[0m [1m[[0mred[1m][0m Entity.AGENT [1m[[0m[35m/[0m[95mred[0m[1m][0m [1m[[0mred[1m][0mEntity.AGENT[1m[[0m[35m/[0m[95mred[0m[1m][0m[1m([0mEntity.AGENT[1m)[0m [1m([0m=>          [1m)[0m [1m([0mX           [1m)[0m       [1m([0m          [1m)[0m [1m[[0mred[1m][0m[1m[[0mCANNOT RESPOND[1m][0m[1m[[0m[35m/[0m[95mred[0m[1m][0m
+*[1m([0morchestrator-assistant[1m)[0m [1m[[0mwhite[1m][0m Entity.LLM [1m[[0m[35m/[0m[95mwhite[0m[1m][0m [1m[[0mgreen[1m][0mEntity.LLM[1m[[0m[35m/[0m[95mgreen[0m[1m][0m[1m([0m          [1m)[0m [1m([0m=>          [1m)[0m [1m([0mX           [1m)[0m   [1;35mTOOL[0m[1m([0m done_tool[1m)[0m [1m[[0mgreen[1m][0mTOOL: [1m{[0m
+  [32m"request"[0m: [32m"done_tool"[0m,
+  [32m"content"[0m: [32m"Successfully summarized the finance-related files and wrote the summaries to myfiles/test_summary.txt."[0m
+[1m}[0m[1m[[0m[35m/[0m[95mgreen[0m[1m][0m
+*[1m([0morchestrator-assistant[1m)[0m [1m[[0mwhite[1m][0m Entity.SYSTEM [1m[[0m[35m/[0m[95mwhite[0m[1m][0m [1m[[0mmagenta[1m][0mEntity.SYSTEM[1m[[0m[35m/[0m[95mmagenta[0m[1m][0m[1m([0morchestrator-assistant[1m)[0m [1m([0m=>          [1m)[0m [1m([0mX           [1m)[0m       [1m([0m          [1m)[0m [1m[[0mmagenta[1m][0mYou are the main file 
+assistant that can help a user with requests about files.
+
+    You have access to the following tools:
+    `file_search`: Use this tool to search for the file
+    `file-summarize`: Use this tool to search for the file
+    `write_file`: Use this tool to write contents to the file
+    `done_tool`: Use this when your task is complete to return the final result.
+    
+    
+    CRITICAL: You CANNOT use multiple tools at once! You must use ONE tool at a time,
+        wait for the result, and THEN decide what to do next.
+
+    When your task is complete, you MUST use the `done_tool` tool to 
+    indicate completion, and use the `content` field to return any response you wish to 
+    provide. It is CRITICAL to use the `content` field to return any results 
+    sought by the user, since they will NOT be able to see anything outside of this tool!
+    
+
+=== GUIDELINES ON SOME TOOLS/FUNCTIONS USAGE ===
+            TOOL: done_tool:
+                        GUIDANCE: 
+        When you determine your task is finished, 
+        use the tool `done_tool` to signal this,
+        along with any message or result, in the `content` field. 
+
+        IMPORTANT: When using this or any other tool/function, you MUST include a 
+        `request` field and set it equal to the FUNCTION/TOOL NAME you intend to use.
+
+
+
+
+TOOL: file-summarize:
+                        GUIDANCE: 
+        IMPORTANT: When using this or any other tool/function, you MUST include a 
+        `request` field and set it equal to the FUNCTION/TOOL NAME you intend to use.
+
+
+
+
+TOOL: file_search:
+                        GUIDANCE: 
+        IMPORTANT: When using this or any other tool/function, you MUST include a 
+        `request` field and set it equal to the FUNCTION/TOOL NAME you intend to use.
+
+
+
+
+TOOL: write_file:
+                        GUIDANCE: 
+        IMPORTANT: When using this or any other tool/function, you MUST include a 
+        `request` field and set it equal to the FUNCTION/TOOL NAME you intend to use.
+
+
+
+
+
+
+=== ALL AVAILABLE TOOLS and THEIR FORMAT INSTRUCTIONS ===
+You have access to the following TOOLS to accomplish your task:
+
+TOOL: done_tool
+            PURPOSE: 
+    To signal the current task is done, along with an optional message [1m<[0m[1;95mcontent[0m[1m>[0m
+    of arbitrary type [1m([0mdefault [3;35mNone[0m[1m)[0m.
+
+            JSON FORMAT: [1m{[0m
+    [32m"properties"[0m: [1m{[0m
+        [32m"request"[0m: [1m{[0m
+            [32m"default"[0m: [32m"done_tool"[0m,
+            [32m"type"[0m: [32m"string"[0m
+        [1m}[0m,
+        [32m"content"[0m: [1m{[0m
+            [32m"default"[0m: [32m""[0m,
+            [32m"type"[0m: [32m"string"[0m
+        [1m}[0m
+    [1m}[0m,
+    [32m"type"[0m: [32m"object"[0m,
+    [32m"required"[0m: [1m[[0m
+        [32m"request"[0m
+    [1m][0m,
+    [32m"request"[0m: [1m{[0m
+        [32m"enum"[0m: [1m[[0m
+            [32m"done_tool"[0m
+        [1m][0m,
+        [32m"type"[0m: [32m"string"[0m
+    [1m}[0m
+[1m}[0m
+
+
+
+TOOL: file-summarize
+            PURPOSE: The purpose of this tool is to summarize files 
+            JSON FORMAT: [1m{[0m
+    [32m"properties"[0m: [1m{[0m
+        [32m"request"[0m: [1m{[0m
+            [32m"default"[0m: [32m"file-summarize"[0m,
+            [32m"type"[0m: [32m"string"[0m
+        [1m}[0m,
+        [32m"file_path"[0m: [1m{[0m
+            [32m"description"[0m: [32m"The file path to summarize contents from"[0m,
+            [32m"type"[0m: [32m"string"[0m
+        [1m}[0m
+    [1m}[0m,
+    [32m"required"[0m: [1m[[0m
+        [32m"file_path"[0m,
+        [32m"request"[0m
+    [1m][0m,
+    [32m"type"[0m: [32m"object"[0m,
+    [32m"request"[0m: [1m{[0m
+        [32m"enum"[0m: [1m[[0m
+            [32m"file-summarize"[0m
+        [1m][0m,
+        [32m"type"[0m: [32m"string"[0m
+    [1m}[0m
+[1m}[0m
+
+
+
+TOOL: file_search
+            PURPOSE: Search for files in a directory based on a query 
+            JSON FORMAT: [1m{[0m
+    [32m"properties"[0m: [1m{[0m
+        [32m"request"[0m: [1m{[0m
+            [32m"default"[0m: [32m"file_search"[0m,
+            [32m"type"[0m: [32m"string"[0m
+        [1m}[0m,
+        [32m"directory"[0m: [1m{[0m
+            [32m"description"[0m: [32m"Directory to search in"[0m,
+            [32m"type"[0m: [32m"string"[0m
+        [1m}[0m,
+        [32m"query"[0m: [1m{[0m
+            [32m"description"[0m: [32m"Search query to find relevant files"[0m,
+            [32m"type"[0m: [32m"string"[0m
+        [1m}[0m
+    [1m}[0m,
+    [32m"required"[0m: [1m[[0m
+        [32m"directory"[0m,
+        [32m"query"[0m,
+        [32m"request"[0m
+    [1m][0m,
+    [32m"type"[0m: [32m"object"[0m,
+    [32m"request"[0m: [1m{[0m
+        [32m"enum"[0m: [1m[[0m
+            [32m"file_search"[0m
+        [1m][0m,
+        [32m"type"[0m: [32m"string"[0m
+    [1m}[0m
+[1m}[0m
+
+
+
+TOOL: write_file
+            PURPOSE: Write content to a file 
+            JSON FORMAT: [1m{[0m
+    [32m"properties"[0m: [1m{[0m
+        [32m"request"[0m: [1m{[0m
+            [32m"default"[0m: [32m"write_file"[0m,
+            [32m"type"[0m: [32m"string"[0m
+        [1m}[0m,
+        [32m"path"[0m: [1m{[0m
+            [32m"description"[0m: [32m"The file path to write to"[0m,
+            [32m"type"[0m: [32m"string"[0m
+        [1m}[0m,
+        [32m"content"[0m: [1m{[0m
+            [32m"description"[0m: [32m"The content to write to the file"[0m,
+            [32m"type"[0m: [32m"string"[0m
+        [1m}[0m
+    [1m}[0m,
+    [32m"required"[0m: [1m[[0m
+        [32m"content"[0m,
+        [32m"path"[0m,
+        [32m"request"[0m
+    [1m][0m,
+    [32m"type"[0m: [32m"object"[0m,
+    [32m"request"[0m: [1m{[0m
+        [32m"enum"[0m: [1m[[0m
+            [32m"write_file"[0m
+        [1m][0m,
+        [32m"type"[0m: [32m"string"[0m
+    [1m}[0m
+[1m}[0m
+
+
+
+When one of the above TOOLs is applicable, you must express your 
+request as [32m"TOOL:"[0m followed by the request in the above format.[1m[[0m[35m/[0m[95mmagenta[0m[1m][0m
+*[1m([0morchestrator-assistant[1m)[0m [1m[[0mwhite[1m][0m Entity.USER [1m[[0m[35m/[0m[95mwhite[0m[1m][0m [1m[[0mblue[1m][0mEntity.USER[1m[[0m[35m/[0m[95mblue[0m[1m][0m[1m([0morchestrator-assistant[1m)[0m [1m([0m=>          [1m)[0m [1m([0mX           [1m)[0m       [1m([0m          [1m)[0m [1m[[0mblue[1m][0m
+        Find files about music in the myfiles directory and 
+        tell me which music-related people were discussed in those files.
+        [1m[[0m[35m/[0m[95mblue[0m[1m][0m
+ [1m([0morchestrator-assistant[1m)[0m [1m[[0mred[1m][0m Entity.USER [1m[[0m[35m/[0m[95mred[0m[1m][0m [1m[[0mblue[1m][0mEntity.USER[1m[[0m[35m/[0m[95mblue[0m[1m][0m[1m([0mEntity.USER[1m)[0m [1m([0m=>          [1m)[0m [1m([0mX           [1m)[0m       [1m([0m          [1m)[0m [1m[[0mblue[1m][0m[1m[[0mCANNOT RESPOND[1m][0m[1m[[0m[35m/[0m[95mblue[0m[1m][0m
+ [1m([0morchestrator-assistant[1m)[0m [1m[[0mred[1m][0m Entity.AGENT [1m[[0m[35m/[0m[95mred[0m[1m][0m
+*[1m([0morchestrator-assistant[1m)[0m [1m[[0mwhite[1m][0m Entity.LLM [1m[[0m[35m/[0m[95mwhite[0m[1m][0m [1m[[0mgreen[1m][0mEntity.LLM[1m[[0m[35m/[0m[95mgreen[0m[1m][0m[1m([0m          [1m)[0m [1m([0m=>          [1m)[0m [1m([0mX           [1m)[0m   [1;35mTOOL[0m[1m([0mfile_search[1m)[0m [1m[[0mgreen[1m][0mTOOL: [1m{[0m[32m"request"[0m: [32m"file_search"[0m, [32m"directory"[0m: 
+[32m"myfiles"[0m, [32m"query"[0m: [32m"music"[0m[1m}[0m[1m[[0m[35m/[0m[95mgreen[0m[1m][0m
+*[1m([0morchestrator-assistant[1m)[0m [1m[[0mwhite[1m][0m Entity.AGENT [1m[[0m[35m/[0m[95mwhite[0m[1m][0m [1m[[0mred[1m][0mEntity.AGENT[1m[[0m[35m/[0m[95mred[0m[1m][0m[1m([0morchestrator-assistant[1m)[0m [1m([0m=>          [1m)[0m [1m([0mX           [1m)[0m       [1m([0m          [1m)[0m [1m[[0mred[1m][0mbeethoven.md: This file discusses Ludwig 
+van Beethoven, one of the most influential composers in Western classical music, detailing his symphonies and impact on musical history.
+beyonce.md: This file is about Beyoncé, a highly influential musical artist, detailing her career, Grammy awards, and musical evolution.
+bill_evans.md: This file describes Bill Evans, a revolutionary jazz pianist, highlighting his contributions to modern jazz piano and harmonic innovations.[1m[[0m[35m/[0m[95mred[0m[1m][0m
+ [1m([0morchestrator-assistant[1m)[0m [1m[[0mred[1m][0m Entity.USER [1m[[0m[35m/[0m[95mred[0m[1m][0m [1m[[0mblue[1m][0mEntity.USER[1m[[0m[35m/[0m[95mblue[0m[1m][0m[1m([0mEntity.USER[1m)[0m [1m([0m=>          [1m)[0m [1m([0mX           [1m)[0m       [1m([0m          [1m)[0m [1m[[0mblue[1m][0m[1m[[0mCANNOT RESPOND[1m][0m[1m[[0m[35m/[0m[95mblue[0m[1m][0m
+ [1m([0morchestrator-assistant[1m)[0m [1m[[0mred[1m][0m Entity.AGENT [1m[[0m[35m/[0m[95mred[0m[1m][0m [1m[[0mred[1m][0mEntity.AGENT[1m[[0m[35m/[0m[95mred[0m[1m][0m[1m([0mEntity.AGENT[1m)[0m [1m([0m=>          [1m)[0m [1m([0mX           [1m)[0m       [1m([0m          [1m)[0m [1m[[0mred[1m][0m[1m[[0mCANNOT RESPOND[1m][0m[1m[[0m[35m/[0m[95mred[0m[1m][0m
+*[1m([0morchestrator-assistant[1m)[0m [1m[[0mwhite[1m][0m Entity.LLM [1m[[0m[35m/[0m[95mwhite[0m[1m][0m [1m[[0mgreen[1m][0mEntity.LLM[1m[[0m[35m/[0m[95mgreen[0m[1m][0m[1m([0m          [1m)[0m [1m([0m=>          [1m)[0m [1m([0mX           [1m)[0m   [1;35mTOOL[0m[1m([0m done_tool[1m)[0m [1m[[0mgreen[1m][0mTOOL: [1m{[0m[32m"request"[0m: [32m"done_tool"[0m, [32m"content"[0m: [32m"The [0m
+[32mmusic-related people discussed in the files are: Ludwig van Beethoven, Beyoncé, and Bill Evans."[0m[1m}[0m[1m[[0m[35m/[0m[95mgreen[0m[1m][0m
+*[1m([0morchestrator-assistant[1m)[0m [1m[[0mwhite[1m][0m Entity.SYSTEM [1m[[0m[35m/[0m[95mwhite[0m[1m][0m [1m[[0mmagenta[1m][0mEntity.SYSTEM[1m[[0m[35m/[0m[95mmagenta[0m[1m][0m[1m([0morchestrator-assistant[1m)[0m [1m([0m=>          [1m)[0m [1m([0mX           [1m)[0m       [1m([0m          [1m)[0m [1m[[0mmagenta[1m][0mYou are the main file 
+assistant that can help a user with requests about files.
+
+    You have access to the following tools:
+    `file_search`: Use this tool to search for the file
+    `file-summarize`: Use this tool to search for the file
+    `write_file`: Use this tool to write contents to the file
+    `done_tool`: Use this when your task is complete to return the final result.
+    
+    
+    CRITICAL: You CANNOT use multiple tools at once! You must use ONE tool at a time,
+        wait for the result, and THEN decide what to do next.
+
+    When your task is complete, you MUST use the `done_tool` tool to 
+    indicate completion, and use the `content` field to return any response you wish to 
+    provide. It is CRITICAL to use the `content` field to return any results 
+    sought by the user, since they will NOT be able to see anything outside of this tool!
+    
+
+=== GUIDELINES ON SOME TOOLS/FUNCTIONS USAGE ===
+            TOOL: done_tool:
+                        GUIDANCE: 
+        When you determine your task is finished, 
+        use the tool `done_tool` to signal this,
+        along with any message or result, in the `content` field. 
+
+        IMPORTANT: When using this or any other tool/function, you MUST include a 
+        `request` field and set it equal to the FUNCTION/TOOL NAME you intend to use.
+
+
+
+
+TOOL: file-summarize:
+                        GUIDANCE: 
+        IMPORTANT: When using this or any other tool/function, you MUST include a 
+        `request` field and set it equal to the FUNCTION/TOOL NAME you intend to use.
+
+
+
+
+TOOL: file_search:
+                        GUIDANCE: 
+        IMPORTANT: When using this or any other tool/function, you MUST include a 
+        `request` field and set it equal to the FUNCTION/TOOL NAME you intend to use.
+
+
+
+
+TOOL: write_file:
+                        GUIDANCE: 
+        IMPORTANT: When using this or any other tool/function, you MUST include a 
+        `request` field and set it equal to the FUNCTION/TOOL NAME you intend to use.
+
+
+
+
+
+
+=== ALL AVAILABLE TOOLS and THEIR FORMAT INSTRUCTIONS ===
+You have access to the following TOOLS to accomplish your task:
+
+TOOL: done_tool
+            PURPOSE: 
+    To signal the current task is done, along with an optional message [1m<[0m[1;95mcontent[0m[1m>[0m
+    of arbitrary type [1m([0mdefault [3;35mNone[0m[1m)[0m.
+
+            JSON FORMAT: [1m{[0m
+    [32m"properties"[0m: [1m{[0m
+        [32m"request"[0m: [1m{[0m
+            [32m"default"[0m: [32m"done_tool"[0m,
+            [32m"type"[0m: [32m"string"[0m
+        [1m}[0m,
+        [32m"content"[0m: [1m{[0m
+            [32m"default"[0m: [32m""[0m,
+            [32m"type"[0m: [32m"string"[0m
+        [1m}[0m
+    [1m}[0m,
+    [32m"type"[0m: [32m"object"[0m,
+    [32m"required"[0m: [1m[[0m
+        [32m"request"[0m
+    [1m][0m,
+    [32m"request"[0m: [1m{[0m
+        [32m"enum"[0m: [1m[[0m
+            [32m"done_tool"[0m
+        [1m][0m,
+        [32m"type"[0m: [32m"string"[0m
+    [1m}[0m
+[1m}[0m
+
+
+
+TOOL: file-summarize
+            PURPOSE: The purpose of this tool is to summarize files 
+            JSON FORMAT: [1m{[0m
+    [32m"properties"[0m: [1m{[0m
+        [32m"request"[0m: [1m{[0m
+            [32m"default"[0m: [32m"file-summarize"[0m,
+            [32m"type"[0m: [32m"string"[0m
+        [1m}[0m,
+        [32m"file_path"[0m: [1m{[0m
+            [32m"description"[0m: [32m"The file path to summarize contents from"[0m,
+            [32m"type"[0m: [32m"string"[0m
+        [1m}[0m
+    [1m}[0m,
+    [32m"required"[0m: [1m[[0m
+        [32m"file_path"[0m,
+        [32m"request"[0m
+    [1m][0m,
+    [32m"type"[0m: [32m"object"[0m,
+    [32m"request"[0m: [1m{[0m
+        [32m"enum"[0m: [1m[[0m
+            [32m"file-summarize"[0m
+        [1m][0m,
+        [32m"type"[0m: [32m"string"[0m
+    [1m}[0m
+[1m}[0m
+
+
+
+TOOL: file_search
+            PURPOSE: Search for files in a directory based on a query 
+            JSON FORMAT: [1m{[0m
+    [32m"properties"[0m: [1m{[0m
+        [32m"request"[0m: [1m{[0m
+            [32m"default"[0m: [32m"file_search"[0m,
+            [32m"type"[0m: [32m"string"[0m
+        [1m}[0m,
+        [32m"directory"[0m: [1m{[0m
+            [32m"description"[0m: [32m"Directory to search in"[0m,
+            [32m"type"[0m: [32m"string"[0m
+        [1m}[0m,
+        [32m"query"[0m: [1m{[0m
+            [32m"description"[0m: [32m"Search query to find relevant files"[0m,
+            [32m"type"[0m: [32m"string"[0m
+        [1m}[0m
+    [1m}[0m,
+    [32m"required"[0m: [1m[[0m
+        [32m"directory"[0m,
+        [32m"query"[0m,
+        [32m"request"[0m
+    [1m][0m,
+    [32m"type"[0m: [32m"object"[0m,
+    [32m"request"[0m: [1m{[0m
+        [32m"enum"[0m: [1m[[0m
+            [32m"file_search"[0m
+        [1m][0m,
+        [32m"type"[0m: [32m"string"[0m
+    [1m}[0m
+[1m}[0m
+
+
+
+TOOL: write_file
+            PURPOSE: Write content to a file 
+            JSON FORMAT: [1m{[0m
+    [32m"properties"[0m: [1m{[0m
+        [32m"request"[0m: [1m{[0m
+            [32m"default"[0m: [32m"write_file"[0m,
+            [32m"type"[0m: [32m"string"[0m
+        [1m}[0m,
+        [32m"path"[0m: [1m{[0m
+            [32m"description"[0m: [32m"The file path to write to"[0m,
+            [32m"type"[0m: [32m"string"[0m
+        [1m}[0m,
+        [32m"content"[0m: [1m{[0m
+            [32m"description"[0m: [32m"The content to write to the file"[0m,
+            [32m"type"[0m: [32m"string"[0m
+        [1m}[0m
+    [1m}[0m,
+    [32m"required"[0m: [1m[[0m
+        [32m"content"[0m,
+        [32m"path"[0m,
+        [32m"request"[0m
+    [1m][0m,
+    [32m"type"[0m: [32m"object"[0m,
+    [32m"request"[0m: [1m{[0m
+        [32m"enum"[0m: [1m[[0m
+            [32m"write_file"[0m
+        [1m][0m,
+        [32m"type"[0m: [32m"string"[0m
+    [1m}[0m
+[1m}[0m
+
+
+
+When one of the above TOOLs is applicable, you must express your 
+request as [32m"TOOL:"[0m followed by the request in the above format.[1m[[0m[35m/[0m[95mmagenta[0m[1m][0m
+*[1m([0morchestrator-assistant[1m)[0m [1m[[0mwhite[1m][0m Entity.USER [1m[[0m[35m/[0m[95mwhite[0m[1m][0m [1m[[0mblue[1m][0mEntity.USER[1m[[0m[35m/[0m[95mblue[0m[1m][0m[1m([0morchestrator-assistant[1m)[0m [1m([0m=>          [1m)[0m [1m([0mX           [1m)[0m       [1m([0m          [1m)[0m [1m[[0mblue[1m][0m
+        Search for files about finance in myfiles and write 
+        a file-by file summary to myfiles/test_summary.txt, formatted 
+        in markdown, with each header being the topic of the file, and the file-path
+        [1m[[0m[35m/[0m[95mblue[0m[1m][0m
+ [1m([0morchestrator-assistant[1m)[0m [1m[[0mred[1m][0m Entity.USER [1m[[0m[35m/[0m[95mred[0m[1m][0m [1m[[0mblue[1m][0mEntity.USER[1m[[0m[35m/[0m[95mblue[0m[1m][0m[1m([0mEntity.USER[1m)[0m [1m([0m=>          [1m)[0m [1m([0mX           [1m)[0m       [1m([0m          [1m)[0m [1m[[0mblue[1m][0m[1m[[0mCANNOT RESPOND[1m][0m[1m[[0m[35m/[0m[95mblue[0m[1m][0m
+ [1m([0morchestrator-assistant[1m)[0m [1m[[0mred[1m][0m Entity.AGENT [1m[[0m[35m/[0m[95mred[0m[1m][0m
+*[1m([0morchestrator-assistant[1m)[0m [1m[[0mwhite[1m][0m Entity.LLM [1m[[0m[35m/[0m[95mwhite[0m[1m][0m [1m[[0mgreen[1m][0mEntity.LLM[1m[[0m[35m/[0m[95mgreen[0m[1m][0m[1m([0m          [1m)[0m [1m([0m=>          [1m)[0m [1m([0mX           [1m)[0m   [1;35mTOOL[0m[1m([0mfile_search[1m)[0m [1m[[0mgreen[1m][0mTOOL: [1m{[0m
+  [32m"request"[0m: [32m"file_search"[0m,
+  [32m"directory"[0m: [32m"myfiles"[0m,
+  [32m"query"[0m: [32m"finance"[0m
+[1m}[0m[1m[[0m[35m/[0m[95mgreen[0m[1m][0m
+*[1m([0morchestrator-assistant[1m)[0m [1m[[0mwhite[1m][0m Entity.AGENT [1m[[0m[35m/[0m[95mwhite[0m[1m][0m [1m[[0mred[1m][0mEntity.AGENT[1m[[0m[35m/[0m[95mred[0m[1m][0m[1m([0morchestrator-assistant[1m)[0m [1m([0m=>          [1m)[0m [1m([0mX           [1m)[0m       [1m([0m          [1m)[0m [1m[[0mred[1m][0mbudgeting_tips.md: Contains information on
+smart budgeting techniques, financial health, income allocation, savings, and debt repayment.
+debt_management.md: Discusses effective debt management strategies, including prioritizing debt, consolidation, credit cards, and emergency funds.
+investment_basics.md: Covers fundamental investment principles, building wealth, risk vs. reward, diversification, asset classes [1m([0mstocks, bonds, real estate[1m)[0m, and dollar-cost averaging.[1m[[0m[35m/[0m[95mred[0m[1m][0m
+ [1m([0morchestrator-assistant[1m)[0m [1m[[0mred[1m][0m Entity.USER [1m[[0m[35m/[0m[95mred[0m[1m][0m [1m[[0mblue[1m][0mEntity.USER[1m[[0m[35m/[0m[95mblue[0m[1m][0m[1m([0mEntity.USER[1m)[0m [1m([0m=>          [1m)[0m [1m([0mX           [1m)[0m       [1m([0m          [1m)[0m [1m[[0mblue[1m][0m[1m[[0mCANNOT RESPOND[1m][0m[1m[[0m[35m/[0m[95mblue[0m[1m][0m
+ [1m([0morchestrator-assistant[1m)[0m [1m[[0mred[1m][0m Entity.AGENT [1m[[0m[35m/[0m[95mred[0m[1m][0m [1m[[0mred[1m][0mEntity.AGENT[1m[[0m[35m/[0m[95mred[0m[1m][0m[1m([0mEntity.AGENT[1m)[0m [1m([0m=>          [1m)[0m [1m([0mX           [1m)[0m       [1m([0m          [1m)[0m [1m[[0mred[1m][0m[1m[[0mCANNOT RESPOND[1m][0m[1m[[0m[35m/[0m[95mred[0m[1m][0m
+*[1m([0morchestrator-assistant[1m)[0m [1m[[0mwhite[1m][0m Entity.LLM [1m[[0m[35m/[0m[95mwhite[0m[1m][0m [1m[[0mgreen[1m][0mEntity.LLM[1m[[0m[35m/[0m[95mgreen[0m[1m][0m[1m([0m          [1m)[0m [1m([0m=>          [1m)[0m [1m([0mX           [1m)[0m   [1;35mTOOL[0m[1m([0mwrite_file[1m)[0m [1m[[0mgreen[1m][0mTOOL: [1m{[0m
+  [32m"request"[0m: [32m"write_file"[0m,
+  [32m"path"[0m: [32m"myfiles/test_summary.txt"[0m,
+  [32m"content"[0m: [32m"# Finance File Summaries\n\n## Budgeting Tips\n*File Path: budgeting_tips.md*\nContains information on smart budgeting techniques, financial health, income allocation, savings, and debt [0m
+[32mrepayment.\n\n## Debt Management\n*File Path: debt_management.md*\nDiscusses effective debt management strategies, including prioritizing debt, consolidation, credit cards, and emergency funds.\n\n## [0m
+[32mInvestment Basics\n*File Path: investment_basics.md*\nCovers fundamental investment principles, building wealth, risk vs. reward, diversification, asset classes [0m[32m([0m[32mstocks, bonds, real estate[0m[32m)[0m[32m, and [0m
+[32mdollar-cost averaging."[0m
+[1m}[0m[1m[[0m[35m/[0m[95mgreen[0m[1m][0m
+*[1m([0morchestrator-assistant[1m)[0m [1m[[0mwhite[1m][0m Entity.AGENT [1m[[0m[35m/[0m[95mwhite[0m[1m][0m [1m[[0mred[1m][0mEntity.AGENT[1m[[0m[35m/[0m[95mred[0m[1m][0m[1m([0morchestrator-assistant[1m)[0m [1m([0m=>          [1m)[0m [1m([0mX           [1m)[0m       [1m([0m          [1m)[0m [1m[[0mred[1m][0mSuccessfully wrote to 
+myfiles/test_summary.txt[1m[[0m[35m/[0m[95mred[0m[1m][0m
+ [1m([0morchestrator-assistant[1m)[0m [1m[[0mred[1m][0m Entity.USER [1m[[0m[35m/[0m[95mred[0m[1m][0m [1m[[0mblue[1m][0mEntity.USER[1m[[0m[35m/[0m[95mblue[0m[1m][0m[1m([0mEntity.USER[1m)[0m [1m([0m=>          [1m)[0m [1m([0mX           [1m)[0m       [1m([0m          [1m)[0m [1m[[0mblue[1m][0m[1m[[0mCANNOT RESPOND[1m][0m[1m[[0m[35m/[0m[95mblue[0m[1m][0m
+ [1m([0morchestrator-assistant[1m)[0m [1m[[0mred[1m][0m Entity.AGENT [1m[[0m[35m/[0m[95mred[0m[1m][0m [1m[[0mred[1m][0mEntity.AGENT[1m[[0m[35m/[0m[95mred[0m[1m][0m[1m([0mEntity.AGENT[1m)[0m [1m([0m=>          [1m)[0m [1m([0mX           [1m)[0m       [1m([0m          [1m)[0m [1m[[0mred[1m][0m[1m[[0mCANNOT RESPOND[1m][0m[1m[[0m[35m/[0m[95mred[0m[1m][0m
+*[1m([0morchestrator-assistant[1m)[0m [1m[[0mwhite[1m][0m Entity.LLM [1m[[0m[35m/[0m[95mwhite[0m[1m][0m [1m[[0mgreen[1m][0mEntity.LLM[1m[[0m[35m/[0m[95mgreen[0m[1m][0m[1m([0m          [1m)[0m [1m([0m=>          [1m)[0m [1m([0mX           [1m)[0m   [1;35mTOOL[0m[1m([0m done_tool[1m)[0m [1m[[0mgreen[1m][0mTOOL: [1m{[0m
+  [32m"request"[0m: [32m"done_tool"[0m,
+  [32m"content"[0m: [32m"Successfully created a summary of finance-related files in `myfiles/test_summary.txt`."[0m
+[1m}[0m[1m[[0m[35m/[0m[95mgreen[0m[1m][0m

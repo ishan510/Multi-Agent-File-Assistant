@@ -1,0 +1,14 @@
+ 	Task	Responder	sender_entity	sender_name	recipient	block	tool_type	tool	content
+*	orchestrator-assistant	Entity.SYSTEM	Entity.SYSTEM	orchestrator-assistant		None			You are the main file assistant that can help a user with requests about files. ...ust express your request as "TOOL:" followed by the request in the above format.
+*	orchestrator-assistant	Entity.USER	Entity.USER	orchestrator-assistant		None			Search for files about finance in myfiles and write a file-by file summary to my...ted in markdown, with each header being the topic of the file, and the file-path
+ 	orchestrator-assistant	Entity.USER	Entity.USER	Entity.USER		None			[CANNOT RESPOND]
+ 	orchestrator-assistant	Entity.AGENT	Entity.USER			None			
+*	orchestrator-assistant	Entity.LLM	Entity.LLM			None	TOOL	file_search	TOOL: { "request": "file_search", "directory": "myfiles", "query": "finance" }
+*	orchestrator-assistant	Entity.AGENT	Entity.AGENT	orchestrator-assistant		None			budgeting_tips.md: Contains information on smart budgeting techniques, financial...fication, asset classes (stocks, bonds, real estate), and dollar-cost averaging.
+ 	orchestrator-assistant	Entity.USER	Entity.USER	Entity.USER		None			[CANNOT RESPOND]
+ 	orchestrator-assistant	Entity.AGENT	Entity.AGENT	Entity.AGENT		None			[CANNOT RESPOND]
+*	orchestrator-assistant	Entity.LLM	Entity.LLM			None	TOOL	write_file	TOOL: { "request": "write_file", "path": "myfiles/test_summary.txt", "content": ...ation, asset classes (stocks, bonds, real estate), and dollar-cost averaging." }
+*	orchestrator-assistant	Entity.AGENT	Entity.AGENT	orchestrator-assistant		None			Successfully wrote to myfiles/test_summary.txt
+ 	orchestrator-assistant	Entity.USER	Entity.USER	Entity.USER		None			[CANNOT RESPOND]
+ 	orchestrator-assistant	Entity.AGENT	Entity.AGENT	Entity.AGENT		None			[CANNOT RESPOND]
+*	orchestrator-assistant	Entity.LLM	Entity.LLM			None	TOOL	done_tool	TOOL: { "request": "done_tool", "content": "Successfully created a summary of finance-related files in `myfiles/test_summary.txt`." }

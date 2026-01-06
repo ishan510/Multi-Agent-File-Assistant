@@ -1,0 +1,10 @@
+ 	Task	Responder	sender_entity	sender_name	recipient	block	tool_type	tool	content
+*	file-summarize-agent	Entity.SYSTEM	Entity.SYSTEM	file-summarize-agent		None			You are a helpful file summarization agent that can help read file contents and ...ust express your request as "TOOL:" followed by the request in the above format.
+*	file-summarize-agent	Entity.USER	Entity.USER	file-summarize-agent		None			Search the file: myfiles/beethoven.md and summarize the content and key points
+ 	file-summarize-agent	Entity.USER	Entity.USER	Entity.USER		None			[CANNOT RESPOND]
+ 	file-summarize-agent	Entity.AGENT	Entity.USER			None			
+*	file-summarize-agent	Entity.LLM	Entity.LLM			None	TOOL	read_file	TOOL: {"request": "read_file", "path": "myfiles/beethoven.md"}
+*	file-summarize-agent	Entity.AGENT	Entity.AGENT	file-summarize-agent		None			# Ludwig van Beethoven Ludwig van Beethoven (1770-1827) stands as one of the mos...anging how composers approached their craft and how audiences experienced music.
+ 	file-summarize-agent	Entity.USER	Entity.USER	Entity.USER		None			[CANNOT RESPOND]
+ 	file-summarize-agent	Entity.AGENT	Entity.AGENT	Entity.AGENT		None			[CANNOT RESPOND]
+*	file-summarize-agent	Entity.LLM	Entity.LLM			None	TOOL	done_tool	TOOL: {"request": "done_tool", "content": "Ludwig van Beethoven (1770-1827) was ...e way for the Romantic era, profoundly changing the course of classical music."}
